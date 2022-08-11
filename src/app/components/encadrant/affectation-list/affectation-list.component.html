@@ -1,0 +1,30 @@
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">Nom</th>
+  <th scope="col">prenom</th>
+  <th scope="col">email</th>
+  </tr>
+  </thead>
+  <tbody>
+<!--
+  <tr *ngFor="let affectations of affectations | paginate: { itemsPerPage: 10, currentPage: currentPage,totalItems:itemsCount }">
+      <td>{{affectations.nom}}</td>
+      <td>{{affectations.prenom}}</td>
+      <td>{{affectations.email}}</td>
+  </tr>
+  <tr>-->
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <pagination-controls (pageChange)="affectationsPageChanged($event)"></pagination-controls>
+      </td>
+    </tr>
+  </tfoot>
+</table>

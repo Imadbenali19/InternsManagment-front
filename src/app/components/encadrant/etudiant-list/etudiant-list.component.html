@@ -1,0 +1,52 @@
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">Nom</th>
+  <th scope="col">prenom</th>
+  <th scope="col">email</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr *ngFor="let student of students | paginate: { itemsPerPage: 10, currentPage: currentPage,totalItems:itemsCount }"  (click)="showStudentDetails($event, student)">
+      <td>{{student.nom}}</td>
+      <td>{{student.prenom}}</td>
+      <td>{{student.email}}</td>
+  </tr>
+  <tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+        <pagination-controls (pageChange)="studentsPageChanged($event)"></pagination-controls>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<ng-template [ngIf]="isModalVisible">
+<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isModalVisible" (visibleChange)="toggleModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>{{selectedStudent.prenom}} {{selectedStudent.nom}}</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <c-nav variant="tabs">
+      <a *ngFor="let stage of selectedStudent.niveau.stages; index as i;" [cTabContent]="tabContent" [routerLink] [tabPaneIdx]="i" cNavLink>{{stage.nom}}</a>
+
+    </c-nav>
+    <c-tab-content #tabContent="cTabContent">
+      <c-tab-pane *ngFor="let stage of selectedStudent.niveau.stages; index as i;" class="p-3" >
+        <div> {{stage.sujet}}</div>
+        <div *ngIf="checkAssinged(stage.nom); else affecterBlock">Content to render when condition is true.</div>
+<ng-template #affecterBlock><button (click)="affecter(i)">Affecter</button></ng-template>
+
+      </c-tab-pane>
+
+    </c-tab-content>
+  </c-modal-body>
+</c-modal>
+</ng-template>

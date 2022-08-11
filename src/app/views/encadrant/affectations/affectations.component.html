@@ -1,0 +1,34 @@
+<c-card>
+  <c-card-header>Liste des affectations</c-card-header>
+      <c-card-body>
+<affectation-list></affectation-list>
+</c-card-body>
+</c-card>
+
+  <c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isModalVisible" (visibleChange)="toggleModal($event)">
+    <c-modal-header>
+      <h5 cModalTitle>Affecter L'etudiant</h5>
+    </c-modal-header>
+    <c-modal-body>
+      <h2>Formulaire d'affectation</h2>
+      <form cForm [formGroup]="assignStudentForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label cLabel for="inputEmail-1">Location</label>
+          <select formControlName="location" aria-label="Default select example" cSelect>
+            <option>Locations</option>
+            <option *ngFor="let location of locations; index as i;" [ngValue]="location">{{location.ville}}</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label cLabel for="inputEmail-1">Date debut</label>
+          <input formControlName="date_debut" cFormControl id="inputEmail-1" type="date">
+        </div>
+        <div class="mb-3">
+          <label cLabel for="inputEmail-1">Date fin</label>
+          <input formControlName="date_fin" cFormControl id="inputEmail-1" type="date">
+        </div>
+        <button type="submit">submit</button>
+
+      </form>
+    </c-modal-body>
+  </c-modal>
