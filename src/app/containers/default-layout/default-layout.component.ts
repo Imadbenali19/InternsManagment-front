@@ -33,5 +33,6 @@ export class DefaultLayoutComponent {
         this.navItems = etudiantNavItems;
         break;
     }
+    
   }
 }
