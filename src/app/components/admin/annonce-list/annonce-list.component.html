@@ -1,0 +1,96 @@
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">titre</th>
+  <th scope="col">description</th>
+  <th scope="col">action</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr *ngFor="let annonce of annonces ">
+      <td>{{annonce.titre}}</td>
+      <td>{{annonce.description}}</td>
+      
+      <td><button (click)="showAnnonceUpdateForm(annonce)">update</button></td>
+      <td><button (click)="showAnnonceDeleteForm(annonce.id)">delete</button></td>
+  </tr>
+  <tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<button (click)="showCreation()">create annonce</button>
+
+<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire d'affectation</h2>
+    <form #annonceForm="ngForm" (ngSubmit)="onClickSubmit(annonceForm.value)">
+      <div class="mb-3">
+        <label cLabel for="titre">titre</label>
+        <input name="titre"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="description">description</label>
+        <input name="description"  type="text" ngModel>
+      </div>
+
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire de modification</h2>
+    <form #annonceUpdateForm="ngForm" (ngSubmit)="onClickUpdate(annonceUpdateForm.value)">
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedAnnonce.id" >
+      <div class="mb-3">
+        <label cLabel for="titre">titre</label>
+        <input name="titre"  type="text" ngModel  [(ngModel)]="selectedAnnonce.titre" >
+      </div>
+      <div class="mb-3">
+        <label cLabel for="description">description</label>
+        <input name="description"  type="text" ngModel [(ngModel)]="selectedAnnonce.description">
+      </div>
+
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Supprimert L'annonce</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
+    <button (click)="deleteAnnonce(selectedID.id)">delete</button>
+    <button (click)="cancel()">cancel</button>
+  </c-modal-body>
+</c-modal>
+

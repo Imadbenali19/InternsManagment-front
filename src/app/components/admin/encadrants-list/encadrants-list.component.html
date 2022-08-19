@@ -1,0 +1,110 @@
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">Nom</th>
+  <th scope="col">prenom</th>
+  <th scope="col">email</th>
+  <th scope="col">action</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr *ngFor="let encadrant of encadrants ">
+      <td>{{encadrant.nom}}</td>
+      <td>{{encadrant.prenom}}</td>
+      <td>{{encadrant.email}}</td>
+      <td><button (click)="showEncadrantUpdateForm(encadrant)">update</button></td>
+      <td><button (click)="showEncadrantDeleteForm(encadrant.id)">delete</button></td>
+  </tr>
+  <tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<button (click)="showCreation()">create encadrant</button>
+
+<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire d'affectation</h2>
+    <form #encadrantForm="ngForm" (ngSubmit)="onClickSubmit(encadrantForm.value)">
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input name="nom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input name="prenom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input name="email"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="password">password</label>
+        <input name="password" type="password" ngModel>
+      </div>
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire de modification</h2>
+    <form #encadrantUpdateForm="ngForm" (ngSubmit)="onClickUpdate(encadrantUpdateForm.value)">
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedEncadrant.id" >
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input name="nom"  type="text" ngModel  [(ngModel)]="selectedEncadrant.nom" >
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input name="prenom"  type="text" ngModel [(ngModel)]="selectedEncadrant.prenom">
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input name="email"  type="text" ngModel [(ngModel)]="selectedEncadrant.email">
+      </div>
+      <div class="mb-3">
+        <label cLabel for="password">password</label>
+        <input name="password" type="password"  [(ngModel)]="selectedEncadrant.password" ngModel>
+      </div>
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Supprimert L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
+    <button (click)="deleteEncadrant(selectedID.id)">delete</button>
+    <button (click)="cancel()">cancel</button>
+  </c-modal-body>
+</c-modal>

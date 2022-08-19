@@ -1,0 +1,141 @@
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">Nom</th>
+  <th scope="col">prenom</th>
+  <th scope="col">email</th>
+  <th scope="col">niveau</th>
+  <th scope="col">action</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr *ngFor="let etudiant of etudiants ">
+      <td>{{etudiant.nom}}</td>
+      <td>{{etudiant.prenom}}</td>
+      <td>{{etudiant.email}}</td>
+
+      <td>{{etudiant.niveau.libelle}}</td>
+
+
+
+      <td><button (click)="showStudentUpdateForm(etudiant)">update</button></td>
+      <td><button (click)="showStudentdeleteForm(etudiant.id)">delete</button></td>
+  </tr>
+  <tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">
+
+      </td>
+    </tr>
+  </tfoot>
+</table>
+<button (click)="showCreation()">create student</button>
+
+<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire d'affectation</h2>
+    <form #studentForm="ngForm" (ngSubmit)="onClickSubmit(studentForm.value)">
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input name="nom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input name="prenom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input name="email"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="niveau">niveau</label>
+        <select ngModel
+        name="niveau"
+        id="niveau"
+        class="form-control"
+        >
+        <option *ngFor="let niveau of nivaux " [value]="niveau.id" >{{ niveau.libelle }}</option>
+    </select>
+
+      </div>
+      <div class="mb-3">
+        <label cLabel for="password">password</label>
+        <input name="password" type="password" ngModel>
+      </div>
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire de modification</h2>
+    <form #studentUpdateForm="ngForm" (ngSubmit)="onClickUpdate(studentUpdateForm.value)">
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedStudent.id" >
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input name="nom"  type="text" ngModel  [(ngModel)]="selectedStudent.nom" >
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input name="prenom"  type="text" ngModel [(ngModel)]="selectedStudent.prenom">
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input name="email"  type="text" ngModel [(ngModel)]="selectedStudent.email">
+      </div>
+      <div class="mb-3">
+
+        <select
+        name="niveau"
+        id="niveau"
+        class="form-control"
+        >
+        <option *ngFor="let niveau of nivaux" [value]="niveau">{{ niveau.libelle }}</option>
+    </select>
+
+      </div>
+      <div class="mb-3">
+        <label cLabel for="password">password</label>
+        <input name="password" type="password"  [(ngModel)]="selectedStudent.password" ngModel>
+      </div>
+
+
+      <button type="submit">submit</button>
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Supprimert L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
+    <button (click)="deleteStudent(selectedID.id)">delete</button>
+    <button (click)="cancel()">cancel</button>
+  </c-modal-body>
+</c-modal>
+
+
+

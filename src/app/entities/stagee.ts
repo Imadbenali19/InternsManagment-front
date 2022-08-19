@@ -1,6 +1,6 @@
-export interface Stage {
+export interface Stagee {
   id?: number;
   nom: string;
-  subject: string;
+  sujet: string;
   duree: number;
 }

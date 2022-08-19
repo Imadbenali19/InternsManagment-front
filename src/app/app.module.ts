@@ -54,6 +54,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
 import { AuthComponent } from './components/auth/auth.component';
 import { LoginComponent } from './components/login/login.component';
+import { EncadrantsListComponent } from './components/admin/encadrants-list/encadrants-list.component';
+import { EtudianttListComponent } from './components/admin/etudiantt-list/etudiantt-list.component';
+import { AdminsComponent } from './views/admin/admins/admins.component';
+import { AdminListComponent } from './components/admin/admin-list/admin-list.component';
+import { CreateStudentComponent } from './views/admin/create-student/create-student.component';
+import { AnnonceListComponent } from './components/admin/annonce-list/annonce-list.component';
+import { EmplacementListComponent } from './components/admin/emplacement-list/emplacement-list.component';
+import { StageListComponent } from './components/admin/stage-list/stage-list.component';
+import { StageComponent } from './views/admin/stage/stage.component';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -71,6 +81,13 @@ const APP_CONTAINERS = [
     ...APP_CONTAINERS,
     AuthComponent,
     LoginComponent,
+    
+
+
+
+
+
+
   ],
   imports: [
     BrowserModule,
