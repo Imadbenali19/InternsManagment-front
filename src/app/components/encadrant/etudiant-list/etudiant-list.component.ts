@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { cilZoom, cilCheckCircle, cilX } from '@coreui/icons';
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
+
 import { Etudiant } from 'src/app/entities/Etudiant';
 import { EncadrantService } from 'src/app/services/encadrant/encadrant.service';
 
@@ -13,6 +16,8 @@ import { EncadrantService } from 'src/app/services/encadrant/encadrant.service';
   styleUrls: ['./etudiant-list.component.scss'],
 })
 export class EtudiantListComponent implements OnInit {
+  icons = { cilZoom, cilCheckCircle, cilX };
+
   students: any = [];
   currentPage: number = 1;
   itemsCount: number = 0;
@@ -28,6 +33,11 @@ export class EtudiantListComponent implements OnInit {
     },
   };
 
+  searchTerm = new FormControl('');
+  search = false;
+
+  loadingStudents = false;
+
   isModalVisible = false;
   constructor(
     private encadrantService: EncadrantService,
@@ -35,21 +45,39 @@ export class EtudiantListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getStudents(this.currentPage - 1);
+    /* this.loadingStudents = true;
+    this.getStudents(this.currentPage - 1);*/
   }
 
   getStudents(page: number): void {
+    this.loadingStudents = true;
     this.encadrantService.getStudents(page).subscribe((students) => {
       console.log(students);
       this.students = students.content;
       this.itemsCount = students.totalElements;
+      this.loadingStudents = false;
     });
   }
 
   studentsPageChanged($event: number) {
-    this.getStudents($event - 1);
+    if (this.search) {
+      this.searchStudents($event - 1);
+    } else {
+      this.getStudents($event - 1);
+    }
     this.currentPage = $event;
     console.log($event);
+  }
+
+  searchStudents(page: number) {
+    this.loadingStudents = true;
+    this.encadrantService
+      .searchStudents(this.searchTerm.value as string, page)
+      .subscribe((students: any) => {
+        this.students = students.content;
+        this.itemsCount = students.totalElements;
+        this.loadingStudents = false;
+      });
   }
 
   showStudentDetails(event: MouseEvent, student: Etudiant) {

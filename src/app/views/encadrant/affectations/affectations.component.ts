@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { IconSetService } from '@coreui/icons-angular';
 import { assignStudentDTO } from 'src/app/dto/assignStudent.dto';
-import { Encadrant } from 'src/app/entities/Encadrant';
+import { cilPencil } from '@coreui/icons';
 import { EncadrantService } from 'src/app/services/encadrant/encadrant.service';
 
 @Component({
@@ -24,10 +25,13 @@ export class AffectationsComponent implements OnInit {
 
   isModalVisible = false;
   constructor(
+    public iconSet: IconSetService,
     private fb: FormBuilder,
     private encadrantService: EncadrantService,
     private activateRoute: ActivatedRoute
-  ) {}
+  ) {
+    iconSet.icons = { cilPencil };
+  }
 
   ngOnInit(): void {
     this.encadrantService.getInernshipsLocations().subscribe((locs) => {
