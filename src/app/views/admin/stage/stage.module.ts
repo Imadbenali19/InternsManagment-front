@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { StageComponent } from './stage.component';
 import { StageListComponent } from 'src/app/components/admin/stage-list/stage-list.component';
 import { StageRoutingModule } from './satge-routing.module';
-import { CardModule, ModalModule, NavModule, PaginationModule, TableModule, TabsModule } from '@coreui/angular';
+import { ButtonModule, CardModule, FormModule, GridModule, ModalModule, NavModule, PaginationModule, TableModule, TabsModule } from '@coreui/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { IconModule } from '@coreui/icons-angular';
 
 
 
@@ -16,12 +18,18 @@ import { FormsModule } from '@angular/forms';
     StageRoutingModule,
     PaginationModule,
     NgxPaginationModule,
+    ReactiveFormsModule,
     CardModule,
-    FormsModule,
     TableModule,
     ModalModule,
+    ButtonModule,
+    FormsModule,
+    FormModule,
+    GridModule,
     TabsModule,
     NavModule,
+    IconModule,
+    NgxSkeletonLoaderModule,
   ]
 })
 export class StageModule { }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { cilCheckCircle, cilPencil, cilTrash, cilX, cilZoom } from '@coreui/icons';
 import { User } from 'src/app/entities/User';
 import { AdminService } from 'src/app/services/admin/admin.service';
 
@@ -9,6 +11,7 @@ import { AdminService } from 'src/app/services/admin/admin.service';
   styleUrls: ['./admin-list.component.scss']
 })
 export class AdminListComponent implements OnInit {
+  icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isAddModalVisible = false;
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
@@ -16,6 +19,10 @@ export class AdminListComponent implements OnInit {
   selectedID:any={id:null}
   admins: any = [];
   currentPage: number = 1;
+  itemsCount: number = 0;
+
+  search=false;
+  searchTerm = new FormControl('');
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -24,9 +31,27 @@ export class AdminListComponent implements OnInit {
   getAdmins(page: number): void {
     this.adminService.getAdmins(page).subscribe((admins) => {
       console.log(admins);
-      this.admins = admins;
+      this.admins = admins.content;
 
     });
+  }
+  adminsPageChanged($event: number) {
+    if (this.search) {
+      this.searchAdmins($event - 1);
+    } else {
+      this.getAdmins($event - 1);
+    }
+    this.currentPage = $event;
+    console.log($event);
+  }
+  searchAdmins(page:number){
+    this.adminService.searchAdmins(this.searchTerm.value as string,page).subscribe((admins:any) => {
+
+      this.admins = admins.content;
+      this.itemsCount = admins.totalElements;
+
+    });
+
   }
   toggleAddModal(event: any) {
     this.isAddModalVisible = event;

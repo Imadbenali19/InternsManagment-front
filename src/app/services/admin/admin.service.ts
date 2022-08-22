@@ -125,5 +125,30 @@ export class AdminService {
       `http://localhost:8081/admin/niveau/${id}`
     );
   }
+  searchStudents(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/students/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  searchAdmins(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/admins/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  searchEncadrants(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/encadrants/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  searchStages(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/stages/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  searchAnnonces(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/annonces/search?search=${searchTerm}&page=${page}`
+    );
+  }
 
 }

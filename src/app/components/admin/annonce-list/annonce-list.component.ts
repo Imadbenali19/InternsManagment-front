@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { cilCheckCircle, cilPencil, cilTrash, cilX, cilZoom } from '@coreui/icons';
 import { Annonce } from 'src/app/entities/Annonce';
 import { AdminService } from 'src/app/services/admin/admin.service';
 
@@ -9,6 +11,7 @@ import { AdminService } from 'src/app/services/admin/admin.service';
   styleUrls: ['./annonce-list.component.scss']
 })
 export class AnnonceListComponent implements OnInit {
+  icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isAddModalVisible = false;
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
@@ -16,6 +19,10 @@ export class AnnonceListComponent implements OnInit {
   selectedID:any={id:null}
   annonces: any = [];
   currentPage: number = 1;
+  itemsCount: number = 0;
+
+  search=false;
+  searchTerm = new FormControl('');
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -23,9 +30,27 @@ export class AnnonceListComponent implements OnInit {
   }
   getAnnonces(page: number): void{
     this.adminService.getAnnonce(page).subscribe((annonces)=>{
-      this.annonces=annonces;
+      this.annonces=annonces.content;
       console.log(this.annonces)
     })
+  }
+  annoncePageChanged($event: number) {
+    if (this.search) {
+      this.searchAnnonce($event - 1);
+    } else {
+      this.getAnnonces($event - 1);
+    }
+    this.currentPage = $event;
+    console.log($event);
+  }
+  searchAnnonce(page:number){
+    this.adminService.searchAnnonces(this.searchTerm.value as string,page).subscribe((annonces:any) => {
+
+      this.annonces = annonces.content;
+      this.itemsCount = annonces.totalElements;
+
+    });
+
   }
   toggleAddModal(event: any) {
     this.isAddModalVisible = event;

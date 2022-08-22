@@ -1,3 +1,48 @@
+<c-row> <h2>Etudiants</h2> </c-row>
+<c-row>
+  <c-card class="my-4 shadow border-0">
+    <c-card-body class="align-middle">
+      <form cForm class="my-auto">
+        <c-row class="mb-2 d-flex justify-content-center align-items-center">
+          <label cCol for="searchTerm">Trouver un etudiant</label>
+          <c-col [sm]="8">
+            <input
+              placeholder="Nom / Prenom / Email"
+              [formControl]="searchTerm"
+              cFormControl
+              id="searchTerm"
+              type="text"
+            />
+          </c-col>
+          <c-col [sm]="2">
+            <button
+              cButton
+              class="d-flex align-items-center"
+              color="primary"
+              type="button"
+              (click)="
+                search = true; currentPage = 1; searchStudents(currentPage - 1)
+              "
+            >
+              <span class="pb-1">Rechercher</span>
+              <span class="mx-1">
+                <svg
+                  cIcon
+                  name="cilZoom"
+                  size="lg"
+                  title="Search lens icon"
+                ></svg>
+              </span>
+            </button>
+          </c-col>
+        </c-row>
+      </form>
+    </c-card-body>
+  </c-card>
+</c-row>
+<c-row>
+  <c-card class="shadow border-0">
+    <c-card-body>
 <table [hover]="true"
 [responsive]="true"
 [striped]="true"
@@ -10,12 +55,17 @@ align="middle"
   <th scope="col">prenom</th>
   <th scope="col">email</th>
   <th scope="col">niveau</th>
-  <th scope="col">action</th>
+  <th scope="col" class="center">action</th>
   </tr>
   </thead>
   <tbody>
 
-  <tr *ngFor="let etudiant of etudiants ">
+  <tr *ngFor="let etudiant of etudiants | paginate
+  : {
+      itemsPerPage: 10,
+      currentPage: currentPage,
+      totalItems: itemsCount
+    } ">
       <td>{{etudiant.nom}}</td>
       <td>{{etudiant.prenom}}</td>
       <td>{{etudiant.email}}</td>
@@ -24,21 +74,25 @@ align="middle"
 
 
 
-      <td><button (click)="showStudentUpdateForm(etudiant)">update</button></td>
-      <td><button (click)="showStudentdeleteForm(etudiant.id)">delete</button></td>
+      <td><button class="bg-warning border-0 mr-2"  (click)="showStudentUpdateForm(etudiant)" cButton><svg cIcon name="cilPencil" size="lg" title="Modifier etudiant"></svg></button><span class="mx-1"></span>
+      <button class="bg-danger border-0 ml-2"  (click)="showStudentdeleteForm(etudiant.id)" cButton><svg cIcon name="cilTrash" size="lg" title="Modifier etudiant"></svg></button></td>
   </tr>
-  <tr>
+
   </tbody>
   <tfoot>
-    <tr>
-      <td colspan="3">
-
-      </td>
-    </tr>
+    <td colspan="4">
+      <pagination-controls
+        (pageChange)="studentsPageChanged($event)"
+      ></pagination-controls>
+    </td>
   </tfoot>
 </table>
-<button (click)="showCreation()">create student</button>
-
+</c-card-body>
+</c-card>
+</c-row>
+<div class="pt-2">
+<button cButton class="bg-success border-0 shadow " (click)="showCreation()">create student</button>
+</div>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
   <c-modal-header>
     <h5 cModalTitle>Creer L'etudiant</h5>
@@ -46,37 +100,38 @@ align="middle"
   <c-modal-body>
 
     <h2>Formulaire d'affectation</h2>
-    <form #studentForm="ngForm" (ngSubmit)="onClickSubmit(studentForm.value)">
+    <form cForm #studentForm="ngForm" (ngSubmit)="onClickSubmit(studentForm.value)">
       <div class="mb-3">
-        <label cLabel for="nom">Nom</label>
-        <input name="nom"  type="text" ngModel>
+        <label  cLabel for="nom">Nom</label>
+        <input cFormControl name="nom"  type="text" ngModel>
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input name="prenom"  type="text" ngModel>
+        <input cFormControl name="prenom"  type="text" ngModel>
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input name="email"  type="text" ngModel>
+        <input cFormControl name="email"  type="text" ngModel>
       </div>
       <div class="mb-3">
         <label cLabel for="niveau">niveau</label>
-        <select ngModel
+        <select ngModel aria-label="Default select example" cSelect
         name="niveau"
         id="niveau"
         class="form-control"
         >
+
         <option *ngFor="let niveau of nivaux " [value]="niveau.id" >{{ niveau.libelle }}</option>
     </select>
 
       </div>
       <div class="mb-3">
         <label cLabel for="password">password</label>
-        <input name="password" type="password" ngModel>
+        <input cFormControl name="password" type="password" ngModel>
       </div>
 
 
-      <button type="submit">submit</button>
+      <input cButton color="primary" type="submit">
 
     </form>
   </c-modal-body>
@@ -89,37 +144,35 @@ align="middle"
 
     <h2>Formulaire de modification</h2>
     <form #studentUpdateForm="ngForm" (ngSubmit)="onClickUpdate(studentUpdateForm.value)">
-      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedStudent.id" >
+      <input  name="id"  type="hidden" ngModel  [(ngModel)]="selectedStudent.id" >
       <div class="mb-3">
         <label cLabel for="nom">Nom</label>
-        <input name="nom"  type="text" ngModel  [(ngModel)]="selectedStudent.nom" >
+        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedStudent.nom" >
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input name="prenom"  type="text" ngModel [(ngModel)]="selectedStudent.prenom">
+        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedStudent.prenom">
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input name="email"  type="text" ngModel [(ngModel)]="selectedStudent.email">
+        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedStudent.email">
       </div>
       <div class="mb-3">
-
-        <select
+        <label cLabel for="niveau">niveau</label>
+        <select aria-label="Default select example" cSelect
+        ngModel
         name="niveau"
         id="niveau"
         class="form-control"
         >
-        <option *ngFor="let niveau of nivaux" [value]="niveau">{{ niveau.libelle }}</option>
+        <option *ngFor="let niveau of nivaux" [value]="niveau.id">{{ niveau.libelle }}</option>
     </select>
 
       </div>
-      <div class="mb-3">
-        <label cLabel for="password">password</label>
-        <input name="password" type="password"  [(ngModel)]="selectedStudent.password" ngModel>
-      </div>
 
 
-      <button type="submit">submit</button>
+
+      <input cButton color="primary" type="submit">
 
     </form>
   </c-modal-body>
@@ -132,8 +185,11 @@ align="middle"
 
     <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
     <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
-    <button (click)="deleteStudent(selectedID.id)">delete</button>
-    <button (click)="cancel()">cancel</button>
+    <div class="mt-2">
+      <button cButton class="bg-danger border-0 shadow " (click)="deleteStudent(selectedID.id)">supprimer</button>
+      <span class="mx-1"></span>
+      <button cButton class="bg-secondary border-0 shadow " (click)="cancel()">Annuler</button>
+  </div>
   </c-modal-body>
 </c-modal>
 

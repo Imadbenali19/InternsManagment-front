@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Stagee } from 'src/app/entities/stagee';
 import { AdminService } from 'src/app/services/admin/admin.service';
+import { cilCheckCircle, cilPencil, cilX, cilZoom,cilTrash } from '@coreui/icons';
 
 @Component({
   selector: 'stage-list',
@@ -9,6 +11,7 @@ import { AdminService } from 'src/app/services/admin/admin.service';
   styleUrls: ['./stage-list.component.scss']
 })
 export class StageListComponent implements OnInit {
+  icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isAddModalVisible = false;
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
@@ -16,6 +19,10 @@ export class StageListComponent implements OnInit {
   selectedID:any={id:null}
   stages: any = [];
   currentPage: number = 1;
+  itemsCount: number = 0;
+
+  search=false;
+  searchTerm = new FormControl('');
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -23,9 +30,27 @@ export class StageListComponent implements OnInit {
   }
   getStages(page: number): void{
     this.adminService.getStages(page).subscribe((stages)=>{
-      this.stages=stages;
+      this.stages=stages.content;
 
     })
+  }
+  stagePageChanged($event: number) {
+    if (this.search) {
+      this.searchStage($event - 1);
+    } else {
+      this.getStages($event - 1);
+    }
+    this.currentPage = $event;
+    console.log($event);
+  }
+  searchStage(page:number){
+    this.adminService.searchStages(this.searchTerm.value as string,page).subscribe((stages:any) => {
+
+      this.stages = stages.content;
+      this.itemsCount = stages.totalElements;
+
+    });
+
   }
   toggleAddModal(event: any) {
     this.isAddModalVisible = event;

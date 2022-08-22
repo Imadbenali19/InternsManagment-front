@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { cilCheckCircle, cilPencil, cilX, cilZoom,cilTrash } from '@coreui/icons';
 import { Etudiant } from 'src/app/entities/Etudiant';
 import { Niveau } from 'src/app/entities/Niveau';
 import { AdminService } from 'src/app/services/admin/admin.service';
@@ -12,6 +14,7 @@ import { textChangeRangeIsUnchanged } from 'typescript/lib/tsserverlibrary';
 })
 export class EtudianttListComponent implements OnInit {
   isAddModalVisible = false;
+  icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
   selectedStudent:any= {id:null,nom:"", prenom:"",email:"",password:""}
@@ -19,7 +22,12 @@ export class EtudianttListComponent implements OnInit {
   selectedID:any={id:null}
   etudiants: any = [];
   nivaux: any = [];
+
   currentPage: number = 1;
+  itemsCount: number = 0;
+
+  search=false;
+  searchTerm = new FormControl('');
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) {
 
    }
@@ -32,7 +40,27 @@ export class EtudianttListComponent implements OnInit {
   getEtudiants(page: number): void {
     this.adminService.getStudents(page).subscribe((etudiants) => {
       console.log(etudiants);
-      this.etudiants = etudiants;
+      this.etudiants = etudiants.content;
+      this.itemsCount = etudiants.totalElements;
+
+    });
+
+
+  }
+  studentsPageChanged($event: number) {
+    if (this.search) {
+      this.searchStudents($event - 1);
+    } else {
+      this.getEtudiants($event - 1);
+    }
+    this.currentPage = $event;
+    console.log($event);
+  }
+  searchStudents(page:number){
+    this.adminService.searchStudents(this.searchTerm.value as string,page).subscribe((etudiants:any) => {
+      console.log(etudiants);
+      this.etudiants = etudiants.content;
+      this.itemsCount = etudiants.totalElements;
 
     });
 
@@ -40,7 +68,7 @@ export class EtudianttListComponent implements OnInit {
   getNiveau(page: number): void {
     this.adminService.getNivaux(page).subscribe((nivaux) => {
 
-      this.nivaux = nivaux;
+      this.nivaux = nivaux.content;
 
     });
   }
@@ -59,14 +87,17 @@ export class EtudianttListComponent implements OnInit {
 }) {
   this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
-    this.selectedNiveau = n;
-
-  });
-  const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:this.selectedNiveau}
+     const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:n}
 
   this.adminService.createStudent(etudiant).subscribe((res) => {
-
+    this.router.routeReuseStrategy.shouldReuseRoute= () => false;
+    this.router.onSameUrlNavigation='reload';
+    this.router.navigate(['./'],{relativeTo: this.route})
+    this.isAddModalVisible=false;
   });;
+
+  });
+
   }
   showCreation(){
     console.log("clicked");
@@ -85,14 +116,26 @@ export class EtudianttListComponent implements OnInit {
    this.isDeleteModalVisible=true;
   }
    onClickUpdate(data: {
-    nom: string; email: string; prenom: string;password:string,id:number
+    nom: string; email: string; prenom: string;password:string;id:number;niveau:number
 
 
 }){
-  const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,id:data.id}
-    console.log(data);
-    this.adminService.updateStudent(etudiant).subscribe(res=>console.log(res));
+  this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
+    this.selectedNiveau = n;
+
+
+
+  const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,email:data.email,id:data.id,niveau:n}
+console.log(etudiant);
+    this.adminService.updateStudent(etudiant).subscribe((res) => {
+
+      this.router.routeReuseStrategy.shouldReuseRoute= () => false;
+         this.router.onSameUrlNavigation='reload';
+         this.router.navigate(['./'],{relativeTo: this.route})
+         this.isAddModalVisible=false;
+    });;
+});
    }
    cancel(){
   this.isDeleteModalVisible=false;
