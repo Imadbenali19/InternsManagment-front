@@ -1,0 +1,187 @@
+<c-row>
+  <c-card class="my-4 shadow border-0">
+    <c-card-body class="align-middle">
+      <form cForm class="my-auto">
+        <c-row class="mb-2 d-flex justify-content-center align-items-center">
+          <label cCol for="searchTerm">Trouver un etudiant</label>
+          <c-col [sm]="8">
+            <input
+              placeholder="Nom / Prenom / Email"
+              [formControl]="searchTerm"
+              cFormControl
+              id="searchTerm"
+              type="text"
+            />
+          </c-col>
+          <c-col [sm]="2">
+            <button
+              cButton
+              class="d-flex align-items-center"
+              color="primary"
+              type="button"
+              (click)="
+                search = true; currentPage = 1; searchEncadrants(currentPage - 1)
+              "
+            >
+              <span class="pb-1">Rechercher</span>
+              <span class="mx-1">
+                <svg
+                  cIcon
+                  name="cilZoom"
+                  size="lg"
+                  title="Search lens icon"
+                ></svg>
+              </span>
+            </button>
+          </c-col>
+        </c-row>
+      </form>
+    </c-card-body>
+  </c-card>
+  <c-row>
+    <c-card class="shadow border-0">
+      <c-card-body>
+<table [hover]="true"
+[responsive]="true"
+[striped]="true"
+align="middle"
+ cTable
+ class="border">
+  <thead>
+  <tr>
+  <th scope="col">Nom</th>
+  <th scope="col">prenom</th>
+  <th scope="col">email</th>
+  <th scope="col">niveau</th>
+  <th scope="col">action</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr *ngFor="let encadrant of encadrants| paginate
+  : {
+      itemsPerPage: 10,
+      currentPage: currentPage,
+      totalItems: itemsCount
+    } ">
+      <td>{{encadrant.nom}}</td>
+      <td>{{encadrant.prenom}}</td>
+      <td>{{encadrant.email}}</td>
+      <td>{{encadrant.niveau.libelle}}</td>
+      <td><button class="bg-warning border-0 mr-2"  (click)="showEncadrantUpdateForm(encadrant)" cButton><svg cIcon name="cilPencil" size="lg" title="Modifier etudiant"></svg></button><span class="mx-1"></span>
+        <button class="bg-danger border-0 ml-2"  (click)="showEncadrantDeleteForm(encadrant.id)" cButton><svg cIcon name="cilTrash" size="lg" title="Modifier etudiant"></svg></button></td>
+  </tr>
+  <tr>
+  </tbody>
+  <tfoot>
+    <td colspan="4">
+      <pagination-controls
+        (pageChange)="encadrantsPageChanged($event)"
+      ></pagination-controls>
+    </td>
+  </tfoot>
+</table>
+</c-card-body>
+</c-card>
+</c-row>
+<div class="pt-2">
+  <button cButton class="bg-success border-0 shadow " (click)="showCreation()">creer encadrant</button>
+  </div>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire d'affectation</h2>
+    <form #encadrantForm="ngForm" (ngSubmit)="onClickSubmit(encadrantForm.value)">
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input cFormControl name="nom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input cFormControl name="prenom"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input cFormControl name="email"  type="text" ngModel>
+      </div>
+      <div class="mb-3">
+        <label cLabel for="niveau">niveau</label>
+        <select aria-label="Default select example" cSelect
+        ngModel
+        name="niveau"
+        id="niveau"
+        class="form-control"
+        >
+        <option *ngFor="let niveau of nivaux" [value]="niveau.id">{{ niveau.libelle }}</option>
+    </select>
+
+      </div>
+      <div class="mb-3">
+        <label cLabel for="password">password</label>
+        <input cFormControl name="password" type="password" ngModel>
+      </div>
+
+
+      <input cButton color="primary" type="submit">
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Creer L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>Formulaire de modification</h2>
+    <form #encadrantUpdateForm="ngForm" (ngSubmit)="onClickUpdate(encadrantUpdateForm.value)">
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedEncadrant.id" >
+      <div class="mb-3">
+        <label cLabel for="nom">Nom</label>
+        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedEncadrant.nom" >
+      </div>
+      <div class="mb-3">
+        <label cLabel for="prenom">prenom</label>
+        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedEncadrant.prenom">
+      </div>
+      <div class="mb-3">
+        <label cLabel for="email">email</label>
+        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedEncadrant.email">
+      </div>
+      <div class="mb-3">
+        <label cLabel for="niveau">niveau</label>
+        <select ngModel aria-label="Default select example" cSelect
+        name="niveau"
+        id="niveau"
+        class="form-control"
+        >
+        <option *ngFor="let niveau of nivaux " [value]="niveau.id" >{{ niveau.libelle }}</option>
+    </select>
+
+      </div>
+
+
+
+      <input cButton color="primary" type="submit">
+
+    </form>
+  </c-modal-body>
+</c-modal>
+<c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Supprimert L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+
+    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
+    <div class="mt-2">
+      <button cButton class="bg-danger border-0 shadow " (click)="deleteEncadrant(selectedID.id)">supprimer</button>
+      <span class="mx-1"></span>
+      <button cButton class="bg-secondary border-0 shadow " (click)="cancel()">Annuler</button>
+  </div>
+  </c-modal-body>
+</c-modal>

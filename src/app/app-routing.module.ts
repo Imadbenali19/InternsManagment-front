@@ -13,6 +13,67 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
 
   {
+    path: 'admin',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Home',
+      role: 'ROLE_ADMIN',
+    },
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./views/admin/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
+      },
+      {
+        path: 'encadrants',
+        loadChildren: () =>
+          import('./views/admin/encadrants/encadrants.module').then(
+            (m) => m.EncadrantsModule
+          ),
+      },
+      {
+        path: 'etudiants',
+        loadChildren: () =>
+          import('./views/admin/etudiants/etudiants.module').then(
+            (m) => m.EtudiantsModule
+          ),
+      },
+      {
+        path: 'admins',
+        loadChildren: () =>
+          import('./views/admin/admins/admins.module').then(
+            (m) => m.AdminsModule
+          ),
+      },
+      {
+        path: 'annonces',
+        loadChildren: () =>
+          import('./views/admin/annonce/annonce.module').then(
+            (m) => m.AnnonceModule
+          ),
+      },
+      {
+        path: 'stages',
+        loadChildren: () =>
+          import('./views/admin/stage/stage.module').then(
+            (m) => m.StageModule
+          ),
+      },
+      {
+        path: 'createStudent',
+        loadChildren: () =>
+          import('./views/admin/create-student/create-student.module').then(
+            (m) => m.CreateStudentModule
+          ),
+      },
+    ]
+  },
+
+  {
     path: 'encadrant',
     component: DefaultLayoutComponent,
     data: {
