@@ -5,9 +5,9 @@ import { Stage } from '../entities/Stage';
 
 export interface assignStudentDTO {
   encadrant: Encadrant | undefined;
-  student: Etudiant | undefined;
+  etudiant: Etudiant | undefined;
   stage: Stage | undefined;
-  location: EmplacementStage | undefined;
+  emplacementStage: EmplacementStage | undefined;
   date_debut: Date | undefined;
   date_fin: Date | undefined;
 }

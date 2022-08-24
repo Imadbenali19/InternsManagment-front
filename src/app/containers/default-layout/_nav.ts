@@ -28,8 +28,8 @@ export const encadrantNavItems: INavData[] = [
 
 export const etudiantNavItems: INavData[] = [
   {
-    name: 'Dashboard',
-    url: '/etudiant/dashboard',
+    name: 'Stages',
+    url: '/etudiant/stages',
     iconComponent: { name: 'cil-speedometer' },
   },
 ];

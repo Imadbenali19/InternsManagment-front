@@ -1,0 +1,71 @@
+<c-row> <h2>Affectations</h2> </c-row>
+<c-row>
+  <c-card class="my-4 shadow border-0">
+    <c-card-body class="align-middle">
+      <c-row
+        *ngIf="
+          loading == false &&
+          etudiant &&
+          etudiant.affectationEmplacementStages.length === 0
+        "
+        >Vous n'etes affecter a aucun stage</c-row
+      >
+      <c-nav variant="tabs">
+        <a
+          *ngFor="
+            let affectation of etudiant.affectationEmplacementStages;
+            index as i
+          "
+          [active]="i == 0 ? true : false"
+          [cTabContent]="tabContent"
+          [routerLink]
+          [tabPaneIdx]="i"
+          cNavLink
+          >{{ affectation.stage.nom }}</a
+        >
+      </c-nav>
+      <c-tab-content #tabContent="cTabContent">
+        <c-tab-pane
+          *ngFor="
+            let affectation of etudiant.affectationEmplacementStages;
+            index as i
+          "
+          class="p-3"
+        >
+          <c-row class="mb-3">
+            <c-col>
+              <h3>Sujet: {{ affectation.stage.sujet }}</h3>
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <c-col>
+              Encadre par M.{{ affectation.encadrant.prenom }}
+              {{ affectation.encadrant.nom }}
+            </c-col>
+            <c-col>
+              De {{ formatDate(affectation.date_debut) }} a
+              {{ formatDate(affectation.date_fin) }}
+            </c-col>
+          </c-row>
+          <c-row class="mb-3">
+            <div>
+              {{ affectation.emplacementStage.nom }}
+              {{ affectation.emplacementStage.addresse }},
+              {{ affectation.emplacementStage.ville }}
+            </div>
+          </c-row>
+          <c-row *ngIf="affectation.documents.length === 0"
+            ><button cButton (click)="ajouterDocument()">
+              ajouterDocument
+            </button></c-row
+          >
+          <c-row *ngIf="affectation.documents.length > 0">
+            <p *ngFor="let document of affectation.documents; index as i">
+              {{ document.lien }}
+            </p>
+          </c-row>
+        </c-tab-pane>
+      </c-tab-content>
+    </c-card-body>
+  </c-card>
+</c-row>

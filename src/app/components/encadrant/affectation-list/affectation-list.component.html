@@ -1,77 +1,186 @@
-<form cForm>
-  <c-row class="mb-4 d-flex justify-content-center align-items-end">
-    <c-col [sm]="5">
-      <label cLabel for="searchTerm">Trouver une affectation</label>
-      <input [formControl]="searchTerm"  cFormControl id="searchTerm" type="text">
-    </c-col>
-    <c-col [sm]="2">
-      <button cButton color="primary" type="button" (click)="search=true; currentPage=1; searchAffectations(currentPage-1)"><svg cIcon name="cilZoom" size="lg" title="Search lens icon"></svg></button>
-    </c-col>
-  </c-row>
-</form>
+<c-row> <h2>Affectations</h2> </c-row>
+<c-row>
+  <c-card class="my-4 shadow border-0">
+    <c-card-body class="align-middle">
+      <form cForm class="my-auto">
+        <c-row class="mb-2 d-flex justify-content-center align-items-center">
+          <label cLabel cCol for="searchTerm">Trouver une affectation</label>
+          <c-col [sm]="8">
+            <input
+              placeholder="Nom / Prenom / Ville / EmplacementStage"
+              [formControl]="searchTerm"
+              cFormControl
+              id="searchTerm"
+              type="text"
+            />
+          </c-col>
+          <c-col [sm]="2">
+            <button
+              class="d-flex align-items-center"
+              cButton
+              color="primary"
+              type="button"
+              (click)="
+                search = true;
+                currentPage = 1;
+                searchAffectations(currentPage - 1)
+              "
+            >
+              <span class="pb-1">Rechercher</span>
+              <span class="mx-1">
+                <svg
+                  cIcon
+                  name="cilZoom"
+                  size="lg"
+                  title="Search lens icon"
+                ></svg>
+              </span>
+            </button>
+          </c-col>
+        </c-row>
+      </form>
+    </c-card-body>
+  </c-card>
+</c-row>
+<c-row>
+  <c-card class="shadow border-0">
+    <c-card-body>
+      <table [hover]="true" [responsive]="true" align="middle" cTable>
+        <thead>
+          <tr>
+            <th scope="col">Etudiant</th>
+            <th scope="col">Stage</th>
+            <th scope="col">Emplacement</th>
+            <th scope="col">Date Debut</th>
+            <th scope="col">Date Debut</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let affectation of affectations
+                | paginate
+                  : {
+                      itemsPerPage: 10,
+                      currentPage: currentPage,
+                      totalItems: itemsCount
+                    }
+            "
+          >
+            <td>
+              {{ affectation.etudiant.nom }}{{ " "
+              }}{{ affectation.etudiant.prenom }}
+            </td>
+            <td>{{ affectation.stage.nom }}</td>
+            <td>{{ affectation.emplacementStage.nom }}</td>
+            <td>{{ formatDate(affectation.date_debut) }}</td>
+            <td>{{ formatDate(affectation.date_fin) }}</td>
+            <td>
+              <button (click)="showUpdateAssignmentModal(affectation)" cButton>
+                <svg
+                  cIcon
+                  name="cilPencil"
+                  size="lg"
+                  title="Modifier affectation"
+                ></svg>
+              </button>
+              <button (click)="showCheckDeleteModal(affectation.id)" cButton>
+                <svg
+                  cIcon
+                  name="cilPencil"
+                  size="lg"
+                  title="Supprimer affectation"
+                ></svg>
+              </button>
+            </td>
+          </tr>
+          <tr></tr>
+        </tbody>
 
-<table [hover]="true"
-[responsive]="true"
-[striped]="true"
-align="middle"
- cTable
- class="border">
-  <thead>
-  <tr>
-  <th scope="col">Etudiant</th>
-  <th scope="col">Stage</th>
-  <th scope="col">Emplacement</th>
-  <th scope="col">Date Debut</th>
-  <th scope="col">Date Debut</th>
-  <th scope="col"></th>
-  </tr>
-  </thead>
-  <tbody>
+        <tfoot>
+          <td colspan="3">
+            <pagination-controls
+              (pageChange)="affectationsPageChanged($event)"
+            ></pagination-controls>
+          </td>
+        </tfoot>
+      </table>
+    </c-card-body>
+  </c-card>
+</c-row>
 
-  <tr *ngFor="let affectation of affectations | paginate: { itemsPerPage: 10, currentPage: currentPage,totalItems:itemsCount }">
-      <td>{{affectation.etudiant.nom}}{{" "}}{{affectation.etudiant.prenom}}</td>
-      <td>{{affectation.stage.nom}}</td>
-      <td>{{affectation.emplacementStage.nom}}</td>
-      <td>{{formatDate(affectation.date_debut)}}</td>
-      <td>{{formatDate(affectation.date_fin)}}</td>
-      <td><button (click)="showUpdateAssignmentModal(affectation)" cButton><svg cIcon name="cilPencil" size="lg" title="Modifier affectation"></svg></button></td>
-  </tr>
-  <tr>
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="3">
-        <pagination-controls (pageChange)="affectationsPageChanged($event)"></pagination-controls>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-
-
-<c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isUpdateAssignmentModalVisible" (visibleChange)="toggleUpdateAssignmentModal($event)">
+<c-modal
+  #verticallyCenteredModal
+  alignment="center"
+  id="modalLg"
+  size="lg"
+  [visible]="isUpdateAssignmentModalVisible"
+  (visibleChange)="toggleUpdateAssignmentModal($event)"
+>
   <c-modal-header>
     <h5 cModalTitle>Affecter L'etudiant</h5>
   </c-modal-header>
   <c-modal-body>
     <h2>Formulaire d'affectation</h2>
-    <form cForm [formGroup]="updateAssignmentForm" (ngSubmit)="onUpdateAssignmentSubmit()">
+    <form
+      cForm
+      [formGroup]="updateAssignmentForm"
+      (ngSubmit)="onUpdateAssignmentSubmit()"
+    >
       <div class="mb-3">
         <label cLabel for="emplacementStage">Location</label>
-        <select formControlName="emplacementStage" aria-label="Default select example" cSelect>
+        <select
+          formControlName="emplacementStage"
+          aria-label="Default select example"
+          cSelect
+        >
           <option>Locations</option>
-          <option *ngFor="let location of locations; index as i;" [ngValue]="location">{{location.ville}}</option>
+          <option
+            *ngFor="let location of locations; index as i"
+            [ngValue]="location"
+          >
+            {{ location.ville }}
+          </option>
         </select>
       </div>
       <div class="mb-3">
         <label cLabel for="date_debut">Date debut</label>
-        <input formControlName="date_debut" cFormControl id="date_debut" type="date">
+        <input
+          formControlName="date_debut"
+          cFormControl
+          id="date_debut"
+          type="date"
+        />
       </div>
       <div class="mb-3">
         <label cLabel for="date_fin">Date fin</label>
-        <input formControlName="date_fin" cFormControl id="date_fin" type="date">
+        <input
+          formControlName="date_fin"
+          cFormControl
+          id="date_fin"
+          type="date"
+        />
       </div>
       <button type="submit">submit</button>
-
     </form>
+  </c-modal-body>
+</c-modal>
+
+<c-modal
+  #verticallyCenteredModal
+  alignment="center"
+  id="modalLg"
+  size="lg"
+  [visible]="isCheckDeleteModalVisible"
+  (visibleChange)="toggleCheckDeleteModal($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Affecter L'etudiant</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <h2>Vous etes sur que vous voulez supprimer l'affectation?</h2>
+    <button cButton (click)="deleteAffectation()">Oui</button>
+    <button cButton (click)="toggleCheckDeleteModal($event)">Non</button>
   </c-modal-body>
 </c-modal>

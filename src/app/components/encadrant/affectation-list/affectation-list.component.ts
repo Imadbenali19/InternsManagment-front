@@ -30,6 +30,9 @@ export class AffectationListComponent implements OnInit {
 
   isUpdateAssignmentModalVisible = false;
 
+  isCheckDeleteModalVisible = false;
+  selectedAffectationId = 0;
+
   searchTerm = new FormControl('');
   search = false;
 
@@ -112,5 +115,22 @@ export class AffectationListComponent implements OnInit {
 
   toggleUpdateAssignmentModal(event: any) {
     this.isUpdateAssignmentModalVisible = event;
+  }
+
+  toggleCheckDeleteModal(event: any) {
+    this.isCheckDeleteModalVisible = event;
+  }
+
+  showCheckDeleteModal(id: number) {
+    this.isCheckDeleteModalVisible = true;
+    this.selectedAffectationId = id;
+  }
+
+  deleteAffectation() {
+    this.encadrantService
+      .deleteAffectation(this.selectedAffectationId)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

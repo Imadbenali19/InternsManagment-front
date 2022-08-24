@@ -44,6 +44,24 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'etudiant',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'Home',
+      role: 'ROLE_ETUDIANT',
+    },
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'stages',
+        loadChildren: () =>
+          import('./views/etudiant/stages/stages.module').then(
+            (m) => m.StagesModule
+          ),
+      },
+    ],
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];
 

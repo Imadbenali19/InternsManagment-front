@@ -11,6 +11,7 @@ import {
   ModalModule,
   PaginationModule,
   TableModule,
+  ToastModule,
 } from '@coreui/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ import { IconModule, IconSetService } from '@coreui/icons-angular';
     ButtonModule,
     FormModule,
     GridModule,
+    ToastModule,
   ],
   providers: [IconSetService],
 })

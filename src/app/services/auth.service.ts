@@ -39,4 +39,45 @@ export class AuthService {
     //CHECK the shape of the actual user-authorities object
     return tokenData['user-authorities'][0];
   }
+
+  logout() {
+    const mockUserClient = 'taco-admin-client';
+    const mockUserSecret = 'secret';
+    const accessToken = sessionStorage.getItem('access_token');
+    const refreshToken = sessionStorage.getItem('refresh_token');
+    const basicAuth =
+      `Basic ` +
+      Buffer.from(`${mockUserClient}:${mockUserSecret}`).toString('base64');
+    const headers = new HttpHeaders({
+      'content-type': 'application/json',
+      Authorization: basicAuth,
+    });
+    const options = {
+      headers: headers,
+    };
+
+    //revoking access token
+    this.httpService.doPost(
+      'http://localhost:9000/oauth2/revoke',
+      {
+        client_id: mockUserClient,
+        client_secret: mockUserSecret,
+        token: accessToken,
+      },
+      options
+    );
+
+    //revoking refresh token
+    this.httpService.doPost(
+      'http://localhost:9000/oauth2/revoke',
+      {
+        client_id: mockUserClient,
+        client_secret: mockUserSecret,
+        token: refreshToken,
+      },
+      options
+    );
+    sessionStorage.clear();
+    document.location.href = 'http://localhost:9000/logout';
+  }
 }

@@ -66,4 +66,11 @@ export class EncadrantService {
       `http://localhost:8081/encadrant/assignments/search?search=${searchTerm}&page=${page}`
     );
   }
+
+  deleteAffectation(id: number) {
+    return this.httpService.doPost(
+      `http://localhost:8081/encadrant/internships/assignment/delete/${id}`,
+      null
+    );
+  }
 }

@@ -45,8 +45,8 @@ export class EtudiantListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    /* this.loadingStudents = true;
-    this.getStudents(this.currentPage - 1);*/
+    this.loadingStudents = true;
+    this.getStudents(this.currentPage - 1);
   }
 
   getStudents(page: number): void {

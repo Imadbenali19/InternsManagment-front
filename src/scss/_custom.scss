@@ -1,2 +1,17 @@
 // Here you can add other styles
 
+.nav-item{
+  margin-bottom: 5px;
+  width: 95%;
+}
+
+.nav-link{
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+}
+
+.nav-link:hover{
+  transform: scale(1.08);
+}
+
+

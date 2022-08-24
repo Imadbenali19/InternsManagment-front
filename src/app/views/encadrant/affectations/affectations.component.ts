@@ -3,7 +3,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IconSetService } from '@coreui/icons-angular';
 import { assignStudentDTO } from 'src/app/dto/assignStudent.dto';
-import { cilPencil } from '@coreui/icons';
+import { cilPencil, cilZoom, cilCheckCircle, cilTrash } from '@coreui/icons';
 import { EncadrantService } from 'src/app/services/encadrant/encadrant.service';
 
 @Component({
@@ -14,9 +14,9 @@ import { EncadrantService } from 'src/app/services/encadrant/encadrant.service';
 export class AffectationsComponent implements OnInit {
   assignStudentForm = this.fb.group<assignStudentDTO>({
     encadrant: undefined,
-    student: undefined,
+    etudiant: undefined,
     stage: undefined,
-    location: undefined,
+    emplacementStage: undefined,
     date_debut: undefined,
     date_fin: undefined,
   });
@@ -24,13 +24,17 @@ export class AffectationsComponent implements OnInit {
   locations: any = [];
 
   isModalVisible = false;
+
+  toastSuccessVisible = false;
+  visible = false;
+  percentage = 0;
   constructor(
     public iconSet: IconSetService,
     private fb: FormBuilder,
     private encadrantService: EncadrantService,
     private activateRoute: ActivatedRoute
   ) {
-    iconSet.icons = { cilPencil };
+    iconSet.icons = { cilPencil, cilZoom, cilCheckCircle, cilTrash };
   }
 
   ngOnInit(): void {
@@ -46,7 +50,7 @@ export class AffectationsComponent implements OnInit {
           this.assignStudentForm.controls.encadrant.setValue(enc);
         });
         console.log(this.encadrantService.selectedStudent);
-        this.assignStudentForm.controls.student.setValue(
+        this.assignStudentForm.controls.etudiant.setValue(
           this.encadrantService.selectedStudent
         );
 
@@ -68,10 +72,26 @@ export class AffectationsComponent implements OnInit {
       )
       .subscribe((res) => {
         console.log(res);
+        if (res) {
+          this.toastSuccessVisible = true;
+        }
       });
   }
 
   toggleModal(event: any) {
     this.isModalVisible = event;
+  }
+
+  toggleToastSuccess() {
+    this.toastSuccessVisible = !this.toastSuccessVisible;
+  }
+
+  onVisibleChange($event: boolean) {
+    this.visible = $event;
+    this.percentage = !this.visible ? 0 : this.percentage;
+  }
+
+  onTimerChange($event: number) {
+    this.percentage = $event * 25;
   }
 }
