@@ -162,7 +162,9 @@
           type="date"
         />
       </div>
-      <button type="submit">submit</button>
+      <button type="submit">
+        {{formSubmitLoading ? '<c-spinner></c-spinner>' : "submit"}}
+      </button>
     </form>
   </c-modal-body>
 </c-modal>
@@ -184,3 +186,33 @@
     <button cButton (click)="toggleCheckDeleteModal($event)">Non</button>
   </c-modal-body>
 </c-modal>
+
+<c-toaster placement="top-end" class="p-3" position="fixed">
+  <c-toast
+    (timer)="onTimerChange($event)"
+    (visibleChange)="onVisibleChange($event)"
+    [visible]="toastVisible"
+  >
+    <div class="d-flex">
+      <c-toast-body>
+        <span
+          >{{ toastMessage }}
+          <span class="p-1 text-white rounded bg-success">
+            <svg
+              cIcon
+              name="cilCheckCircle"
+              size="lg"
+              title="Etudiant affecter"
+            ></svg> </span
+          >!</span
+        >
+      </c-toast-body>
+      <button
+        aria-label="close"
+        cButtonClose
+        class="me-2 m-auto"
+        (click)="toastVisible = false"
+      ></button>
+    </div>
+  </c-toast>
+</c-toaster>

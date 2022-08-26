@@ -25,9 +25,9 @@ export class AffectationsComponent implements OnInit {
 
   isModalVisible = false;
 
-  toastSuccessVisible = false;
-  visible = false;
+  toastVisible = false;
   percentage = 0;
+  toastMessage = '';
   constructor(
     public iconSet: IconSetService,
     private fb: FormBuilder,
@@ -73,7 +73,8 @@ export class AffectationsComponent implements OnInit {
       .subscribe((res) => {
         console.log(res);
         if (res) {
-          this.toastSuccessVisible = true;
+          this.toastMessage = 'Etudiant affecter';
+          this.toastVisible = true;
         }
       });
   }
@@ -83,12 +84,12 @@ export class AffectationsComponent implements OnInit {
   }
 
   toggleToastSuccess() {
-    this.toastSuccessVisible = !this.toastSuccessVisible;
+    this.toastVisible = !this.toastVisible;
   }
 
   onVisibleChange($event: boolean) {
-    this.visible = $event;
-    this.percentage = !this.visible ? 0 : this.percentage;
+    this.toastVisible = $event;
+    this.percentage = !this.toastVisible ? 0 : this.percentage;
   }
 
   onTimerChange($event: number) {

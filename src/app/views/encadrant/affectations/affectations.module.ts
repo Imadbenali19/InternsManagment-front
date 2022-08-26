@@ -12,6 +12,7 @@ import {
   PaginationModule,
   TableModule,
   ToastModule,
+  SpinnerModule
 } from '@coreui/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +34,7 @@ import { IconModule, IconSetService } from '@coreui/icons-angular';
     FormModule,
     GridModule,
     ToastModule,
+    SpinnerModule
   ],
   providers: [IconSetService],
 })

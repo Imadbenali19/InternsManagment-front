@@ -57,12 +57,12 @@
   <c-toast
     (timer)="onTimerChange($event)"
     (visibleChange)="onVisibleChange($event)"
-    [visible]="toastSuccessVisible"
+    [visible]="toastVisible"
   >
     <div class="d-flex">
       <c-toast-body>
         <span
-          >Etudiant affecter
+          >{{ toastMessage }}
           <span class="p-1 text-white rounded bg-success">
             <svg
               cIcon
@@ -70,14 +70,13 @@
               size="lg"
               title="Etudiant affecter"
             ></svg> </span
-          >!</span
-        >
+        ></span>
       </c-toast-body>
       <button
         aria-label="close"
         cButtonClose
         class="me-2 m-auto"
-        (click)="toastSuccessVisible = false"
+        (click)="toastVisible = false"
       ></button>
     </div>
   </c-toast>

@@ -10,6 +10,7 @@ import {
   ButtonModule,
   FormModule,
   GridModule,
+  SpinnerModule
 } from '@coreui/angular';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
@@ -38,6 +39,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     NavModule,
     IconModule,
     NgxSkeletonLoaderModule,
+    SpinnerModule
   ],
   providers: [IconSetService],
 })

@@ -38,6 +38,12 @@ export class AffectationListComponent implements OnInit {
 
   loadingAffectations = false;
 
+  formSubmitLoading = false;
+
+  toastVisible = false;
+  percentage = 0;
+  toastMessage = '';
+
   constructor(
     private fb: FormBuilder,
     private encadrantService: EncadrantService
@@ -83,12 +89,17 @@ export class AffectationListComponent implements OnInit {
   }
 
   onUpdateAssignmentSubmit() {
+    this.formSubmitLoading = true;
     this.encadrantService
       .updateStudentAssignment(
         this.updateAssignmentForm.value as updateStudentAssignmentDTO
       )
       .subscribe((res) => {
-        console.log(res);
+        if (res) {
+          this.toastMessage = 'Etudiant modifier';
+          this.toastVisible = true;
+        }
+        this.formSubmitLoading = false;
       });
   }
 
@@ -130,7 +141,27 @@ export class AffectationListComponent implements OnInit {
     this.encadrantService
       .deleteAffectation(this.selectedAffectationId)
       .subscribe((res) => {
+        if (res) {
+          if (res) {
+            this.toastMessage = 'Etudiant supprimer';
+            this.toastVisible = true;
+          }
+        }
+
         console.log(res);
       });
+  }
+
+  toggleToastSuccess() {
+    this.toastVisible = !this.toastVisible;
+  }
+
+  onVisibleChange($event: boolean) {
+    this.toastVisible = $event;
+    this.percentage = !this.toastVisible ? 0 : this.percentage;
+  }
+
+  onTimerChange($event: number) {
+    this.percentage = $event * 25;
   }
 }
