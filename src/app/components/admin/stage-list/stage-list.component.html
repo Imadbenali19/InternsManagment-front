@@ -3,7 +3,7 @@
     <c-card-body class="align-middle">
       <form cForm class="my-auto">
         <c-row class="mb-2 d-flex justify-content-center align-items-center">
-          <label cCol for="searchTerm">Trouver un etudiant</label>
+          <label cCol for="searchTerm">Trouver un stage</label>
           <c-col [sm]="8">
             <input
               placeholder="Nom / Prenom / Email"
@@ -93,19 +93,19 @@ align="middle"
   </c-modal-header>
   <c-modal-body>
 
-    <h2>Formulaire d'affectation</h2>
+    <h2>Formulaire de creation</h2>
     <form #stageForm="ngForm" (ngSubmit)="onClickSubmit(stageForm.value)">
       <div class="mb-3">
         <label cLabel for="nom">nom</label>
-        <input cFormControl name="nom"  type="text" ngModel>
+        <input cFormControl name="nom"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="sujet">sujet</label>
-        <input cFormControl name="sujet"  type="text" ngModel>
+        <input cFormControl name="sujet"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="duree">duree</label>
-        <input cFormControl name="duree"  type="text" ngModel>
+        <input cFormControl name="duree"  type="text" ngModel required>
       </div>
 
 
@@ -117,7 +117,7 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Creer L'etudiant</h5>
+    <h5 cModalTitle>Modifier le stage</h5>
   </c-modal-header>
   <c-modal-body>
 
@@ -126,15 +126,15 @@ align="middle"
       <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedStage.id" >
       <div class="mb-3">
         <label cLabel for="nom">nom</label>
-        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedStage.nom" >
+        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedStage.nom" required >
       </div>
       <div class="mb-3">
         <label cLabel for="sujet">sujet</label>
-        <input cFormControl name="sujet"  type="text" ngModel [(ngModel)]="selectedStage.sujet">
+        <input cFormControl name="sujet"  type="text" ngModel [(ngModel)]="selectedStage.sujet" required>
       </div>
       <div class="mb-3">
         <label cLabel for="duree">duree</label>
-        <input cFormControl name="duree"  type="text" ngModel [(ngModel)]="selectedStage.duree">
+        <input cFormControl name="duree"  type="text" ngModel [(ngModel)]="selectedStage.duree" required>
       </div>
 
 
@@ -146,11 +146,11 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Supprimert le stage</h5>
+    <h5 cModalTitle>Supprimer le stage</h5>
   </c-modal-header>
   <c-modal-body>
 
-    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <h2>Supprimer le stage?</h2>
     <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
     <div class="mt-2">
       <button cButton class="bg-danger border-0 shadow " (click)="deleteStage(selectedID.id)">supprimer</button>

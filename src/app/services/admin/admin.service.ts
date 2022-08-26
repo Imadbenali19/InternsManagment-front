@@ -150,5 +150,10 @@ export class AdminService {
       `http://localhost:8081/admin/annonces/search?search=${searchTerm}&page=${page}`
     );
   }
+  createStudents(data:any): Observable<any> {
+    return this.httpService.doPost(
+      `http://localhost:8081/admin/students`, data
+    );
+  }
 
 }
