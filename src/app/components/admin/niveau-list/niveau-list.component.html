@@ -3,10 +3,10 @@
     <c-card-body class="align-middle">
       <form cForm class="my-auto">
         <c-row class="mb-2 d-flex justify-content-center align-items-center">
-          <label cCol for="searchTerm">Trouver emplacement</label>
+          <label cCol for="searchTerm">Trouver niveau</label>
           <c-col [sm]="8">
             <input
-              placeholder="Addresse / Ville / Nom"
+              placeholder="Nom / Prenom / Email"
               [formControl]="searchTerm"
               cFormControl
               id="searchTerm"
@@ -20,7 +20,7 @@
               color="primary"
               type="button"
               (click)="
-                search = true; currentPage = 1; searchEmpl(currentPage - 1)
+                search = true; currentPage = 1; searchNiveau(currentPage - 1)
               "
             >
               <span class="pb-1">Rechercher</span>
@@ -50,33 +50,31 @@ align="middle"
  class="border">
   <thead>
   <tr>
-  <th scope="col">Nom</th>
-  <th scope="col">Addresse</th>
-  <th scope="col">Ville</th>
+  <th scope="col">libelle</th>
+
   <th scope="col">action</th>
   </tr>
   </thead>
   <tbody>
 
-  <tr *ngFor="let empl of empls | paginate
+  <tr *ngFor="let n of niveau | paginate
   : {
       itemsPerPage: 10,
       currentPage: currentPage,
       totalItems: itemsCount
     } ">
-      <td>{{empl.nom}}</td>
-      <td>{{empl.adresse}}</td>
-      <td>{{empl.ville}}</td>
+      <td>{{n.libelle}}</td>
 
-      <td><button class="bg-warning border-0 mr-2"  (click)="showEmplUpdateForm(empl)" cButton><svg cIcon name="cilPencil" size="lg" title="Modifier annonce"></svg></button><span class="mx-1"></span>
-        <button class="bg-danger border-0 ml-2"  (click)="showEmplDeleteForm(empl.id)" cButton><svg cIcon name="cilTrash" size="lg" title="supprimer annonce"></svg></button></td>
+
+      <td><button class="bg-warning border-0 mr-2"  (click)="showNiveauUpdateForm(n)" cButton><svg cIcon name="cilPencil" size="lg" title="Modifier annonce"></svg></button><span class="mx-1"></span>
+        <button class="bg-danger border-0 ml-2"  (click)="showNiveauDeleteForm(n.id)" cButton><svg cIcon name="cilTrash" size="lg" title="supprimer annonce"></svg></button></td>
   </tr>
   <tr>
   </tbody>
   <tfoot>
     <td colspan="4">
       <pagination-controls
-        (pageChange)="emplPageChanged($event)"
+        (pageChange)="niveauPageChanged($event)"
       ></pagination-controls>
     </td>
   </tfoot>
@@ -85,29 +83,23 @@ align="middle"
 </c-card>
 </c-row>
 <div class="pt-2">
-  <button cButton class="bg-success border-0 shadow " (click)="showCreation()">creer annonce</button>
+  <button cButton class="bg-success border-0 shadow " (click)="showCreation()">creer niveau</button>
   </div>
 
 <c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Creer emplacement</h5>
+    <h5 cModalTitle>Creer le niveau</h5>
   </c-modal-header>
   <c-modal-body>
 
     <h2>Formulaire de creation</h2>
     <form cForm #annonceForm="ngForm" (ngSubmit)="onClickSubmit(annonceForm.value)">
       <div class="mb-3">
-        <label cLabel for="nom">nom</label>
-        <input cFormControl name="nom"  type="text" ngModel required>
+        <label cLabel for="libelle">libelle</label>
+        <input cFormControl name="libelle"  type="text" ngModel required>
       </div>
-      <div class="mb-3">
-        <label cLabel for="adresse">adresse</label>
-        <input cFormControl name="adresse"  type="text" ngModel required>
-      </div>
-      <div class="mb-3">
-        <label cLabel for="ville">ville</label>
-        <input cFormControl name="ville"  type="text" ngModel required>
-      </div>
+
+
 
 
       <input cButton color="primary" type="submit">
@@ -117,25 +109,19 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Modifier emplacement</h5>
+    <h5 cModalTitle>Modifier le niveau</h5>
   </c-modal-header>
   <c-modal-body>
 
     <h2>Formulaire de modification</h2>
     <form #annonceUpdateForm="ngForm" (ngSubmit)="onClickUpdate(annonceUpdateForm.value)">
-      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedEmplacement.id" >
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedNiveau.id" >
       <div class="mb-3">
-        <label cLabel for="nom">nom</label>
-        <input cFormControl  name="nom"  type="text" ngModel  [(ngModel)]="selectedEmplacement.nom" required>
+        <label cLabel for="libelle">libelle</label>
+        <input cFormControl  name="libelle"  type="text" ngModel  [(ngModel)]="selectedNiveau.libelle" required>
       </div>
-      <div class="mb-3">
-        <label cLabel for="adresse">addresse</label>
-        <input cFormControl name="adresse"  type="text" ngModel [(ngModel)]="selectedEmplacement.adresse" required>
-      </div>
-      <div class="mb-3">
-        <label cLabel for="ville">ville</label>
-        <input cFormControl name="ville"  type="text" ngModel [(ngModel)]="selectedEmplacement.ville" required>
-      </div>
+
+
 
 
       <input cButton color="primary" type="submit">
@@ -145,14 +131,14 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Supprimert l'emplacement</h5>
+    <h5 cModalTitle>Supprimert le niveau</h5>
   </c-modal-header>
   <c-modal-body>
 
-    <h2>Supprimer L'emplacement?</h2>
+    <h2>Supprimer le niveau?</h2>
     <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
     <div class="mt-2">
-      <button cButton class="bg-danger border-0 shadow " (click)="deleteEmpl(selectedID.id)">supprimer</button>
+      <button cButton class="bg-danger border-0 shadow " (click)="deleteNiveau(selectedID.id)">supprimer</button>
       <span class="mx-1"></span>
       <button cButton class="bg-secondary border-0 shadow " (click)="cancel()">Annuler</button>
   </div>

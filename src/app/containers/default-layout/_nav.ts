@@ -32,6 +32,17 @@ export const adminNavItems: INavData[] = [
   url: '/admin/stages',
   iconComponent: { name: 'cil-speedometer' },
  },
+ {
+  name: 'Les Emplacement',
+  url: '/admin/emplacements',
+  iconComponent: { name: 'cil-speedometer' },
+ },
+ {
+  name: 'Niveau',
+  url: '/admin/niveau',
+  iconComponent: { name: 'cil-speedometer' },
+ },
+
 
 ];
 export const encadrantNavItems: INavData[] = [

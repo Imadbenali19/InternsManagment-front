@@ -96,18 +96,21 @@ export class EtudianttListComponent implements OnInit {
 }) {
   this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
-     const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:n}
-
-  this.adminService.createStudent(etudiant).subscribe((res) => {
-    this.router.routeReuseStrategy.shouldReuseRoute= () => false;
-    this.router.onSameUrlNavigation='reload';
-    this.router.navigate(['./'],{relativeTo: this.route})
-    this.isAddModalVisible=false;
-  });;
+    const etudiant:any ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:data.niveau}
+     console.log(etudiant)
+    this.adminService.createStudent(etudiant).subscribe((res) => {
+      console.log(res);
+      this.router.routeReuseStrategy.shouldReuseRoute= () => false;
+         this.router.onSameUrlNavigation='reload';
+         this.router.navigate(['./'],{relativeTo: this.route})
+         this.isAddModalVisible=false;
+    });;
 
   });
 
   }
+
+
   showCreation(){
     console.log("clicked");
     this.isAddModalVisible=true;

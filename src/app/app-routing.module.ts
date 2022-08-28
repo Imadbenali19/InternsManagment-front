@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './components/auth/auth.component';
+import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 
 import { DefaultLayoutComponent } from './containers';
@@ -11,7 +12,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: 'authorized', redirectTo: 'auth', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, pathMatch: 'full' },
-
+  { path: 'acueil', component: HomeComponent, pathMatch: 'full' },
   {
     path: 'admin',
     component: DefaultLayoutComponent,
@@ -64,10 +65,17 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'createStudent',
+        path: 'emplacements',
         loadChildren: () =>
-          import('./views/admin/create-student/create-student.module').then(
-            (m) => m.CreateStudentModule
+          import('./views/admin/emplacemnt/emplacemnt.module').then(
+            (m) => m.EmplacemntModule
+          ),
+      },
+      {
+        path: 'niveau',
+        loadChildren: () =>
+          import('./views/admin/niveau/niveau.module').then(
+            (m) => m.NiveauModule
           ),
       },
     ]

@@ -60,6 +60,7 @@ export class EncadrantService {
       `http://localhost:8081/encadrant/students/search?search=${searchTerm}&page=${page}`
     );
   }
+  
 
   searchAffectations(searchTerm: string, page: number) {
     return this.httpService.doGet(
