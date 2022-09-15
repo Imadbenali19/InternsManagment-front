@@ -63,7 +63,7 @@ import { AnnonceListComponent } from './components/admin/annonce-list/annonce-li
 import { EmplacementListComponent } from './components/admin/emplacement-list/emplacement-list.component';
 import { StageListComponent } from './components/admin/stage-list/stage-list.component';
 import { StageComponent } from './views/admin/stage/stage.component';
-
+import { SkeletonListLoaderComponent } from './components/skeleton-list-loader/skeleton-list-loader.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -81,13 +81,6 @@ const APP_CONTAINERS = [
     ...APP_CONTAINERS,
     AuthComponent,
     LoginComponent,
-    
-
-
-
-
-
-
   ],
   imports: [
     BrowserModule,

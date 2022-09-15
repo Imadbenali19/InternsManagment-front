@@ -1,16 +1,16 @@
 // Here you can add other styles
 
-.nav-item{
+.sidebar-nav .nav-item{
   margin-bottom: 5px;
   width: 95%;
 }
 
-.nav-link{
+.sidebar-nav .nav-link{
   border-top-right-radius: 10px !important;
   border-bottom-right-radius: 10px !important;
 }
 
-.nav-link:hover{
+.sidebar-nav .nav-link:hover{
   transform: scale(1.08);
 }
 
