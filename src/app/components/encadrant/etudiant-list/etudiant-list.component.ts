@@ -108,4 +108,11 @@ export class EtudiantListComponent implements OnInit {
       queryParams: { stageId: i },
     });
   }
+  getPreviewLink(link: any) {
+    link = link.split('/');
+    link[link.length - 1] = 'preview';
+    link = link.join('/');
+    console.log(link);
+    return link;
+  }
 }

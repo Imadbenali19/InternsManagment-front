@@ -21,6 +21,7 @@ import { EtudiantListComponent } from 'src/app/components/encadrant/etudiant-lis
 import { SkeletonListLoaderComponent } from 'src/app/components/skeleton-list-loader/skeleton-list-loader.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     IconModule,
     NgxSkeletonLoaderModule,
     SpinnerModule,
+    NgxDocViewerModule,
   ],
   providers: [IconSetService],
 })
