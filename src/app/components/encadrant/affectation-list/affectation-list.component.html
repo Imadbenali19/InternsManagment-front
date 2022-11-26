@@ -77,7 +77,11 @@
             <td>{{ formatDate(affectation.date_debut) }}</td>
             <td>{{ formatDate(affectation.date_fin) }}</td>
             <td>
-              <button (click)="showUpdateAssignmentModal(affectation)" cButton>
+              <button
+                class="bg-warning border-0"
+                (click)="showUpdateAssignmentModal(affectation)"
+                cButton
+              >
                 <svg
                   cIcon
                   name="cilPencil"
@@ -85,10 +89,15 @@
                   title="Modifier affectation"
                 ></svg>
               </button>
-              <button (click)="showCheckDeleteModal(affectation.id)" cButton>
+              <span class="mx-2"></span>
+              <button
+                class="bg-danger border-0"
+                (click)="showCheckDeleteModal(affectation.id)"
+                cButton
+              >
                 <svg
                   cIcon
-                  name="cilPencil"
+                  name="cilTrash"
                   size="lg"
                   title="Supprimer affectation"
                 ></svg>
@@ -118,11 +127,8 @@
   [visible]="isUpdateAssignmentModalVisible"
   (visibleChange)="toggleUpdateAssignmentModal($event)"
 >
-  <c-modal-header>
-    <h5 cModalTitle>Affecter L'etudiant</h5>
-  </c-modal-header>
   <c-modal-body>
-    <h2>Formulaire d'affectation</h2>
+    <h2>Modifier Affectation</h2>
     <form
       cForm
       [formGroup]="updateAssignmentForm"
@@ -135,7 +141,7 @@
           aria-label="Default select example"
           cSelect
         >
-          <option>Locations</option>
+          <option disabled>Locations</option>
           <option
             *ngFor="let location of locations; index as i"
             [ngValue]="location"
@@ -162,9 +168,7 @@
           type="date"
         />
       </div>
-      <button type="submit">
-        {{formSubmitLoading ? '<c-spinner></c-spinner>' : "submit"}}
-      </button>
+      <button cButton type="submit">Submit</button>
     </form>
   </c-modal-body>
 </c-modal>
@@ -180,10 +184,12 @@
   <c-modal-header>
     <h5 cModalTitle>Affecter L'etudiant</h5>
   </c-modal-header>
-  <c-modal-body>
+  <c-modal-body class="d-flex flex-column align-items-center">
     <h2>Vous etes sur que vous voulez supprimer l'affectation?</h2>
-    <button cButton (click)="deleteAffectation()">Oui</button>
-    <button cButton (click)="toggleCheckDeleteModal($event)">Non</button>
+    <div style="width: 30%" class="d-flex justify-content-around mt-3">
+      <button cButton (click)="deleteAffectation()">Oui</button>
+      <button cButton (click)="toggleCheckDeleteModal($event)">Non</button>
+    </div>
   </c-modal-body>
 </c-modal>
 

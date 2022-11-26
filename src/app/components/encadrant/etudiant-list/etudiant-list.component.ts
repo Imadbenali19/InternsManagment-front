@@ -89,7 +89,7 @@ export class EtudiantListComponent implements OnInit {
   checkAssinged(stageNom: any) {
     const stageNames = this.selectedStudent.affectationEmplacementStages.map(
       (affectation: any) => {
-        return affectation.nom;
+        return affectation.stage.nom;
       }
     );
     if (stageNames.includes(stageNom)) {
@@ -107,5 +107,12 @@ export class EtudiantListComponent implements OnInit {
     this.router.navigate([`/encadrant/affectations`], {
       queryParams: { stageId: i },
     });
+  }
+  getPreviewLink(link: any) {
+    link = link.split('/');
+    link[link.length - 1] = 'preview';
+    link = link.join('/');
+    console.log(link);
+    return link;
   }
 }

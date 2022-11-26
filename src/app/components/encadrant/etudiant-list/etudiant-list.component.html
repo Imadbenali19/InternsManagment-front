@@ -66,46 +66,119 @@
             }"
           >
           </ngx-skeleton-loader>-->
-          <tr
-            *ngFor="
-              let student of students
-                | paginate
-                  : {
-                      itemsPerPage: 10,
-                      currentPage: currentPage,
-                      totalItems: itemsCount
-                    }
-            "
-            (click)="showStudentDetails($event, student)"
-          >
-            <td>{{ student.nom }}</td>
-            <td>{{ student.prenom }}</td>
-            <td>{{ student.email }}</td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>Ettani</td>
-            <td>Zakaria</td>
-            <td>test@email.com</td>
-            <td>
-              <span class="p-1 text-white rounded bg-success">
-                <svg
-                  cIcon
-                  name="cilCheckCircle"
-                  size="lg"
-                  title="Etudiant affecter"
-                ></svg>
-              </span>
-              <span class="p-1 text-white rounded bg-danger">
-                <svg
-                  cIcon
-                  name="cilX"
-                  size="lg"
-                  title="Etudiant affecter"
-                ></svg>
-              </span>
-            </td>
-          </tr>
+          <ng-template [ngIf]="loadingStudents" [ngIfElse]="displayStudents">
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+            <tr class="loading">
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+              <td><div class="bar"></div></td>
+            </tr>
+          </ng-template>
+          <ng-template #displayStudents>
+            <tr
+              *ngFor="
+                let student of students
+                  | paginate
+                    : {
+                        itemsPerPage: 10,
+                        currentPage: currentPage,
+                        totalItems: itemsCount
+                      }
+              "
+              (click)="showStudentDetails($event, student)"
+            >
+              <td>{{ student.nom }}</td>
+              <td>{{ student.prenom }}</td>
+              <td>{{ student.email }}</td>
+              <td>
+                {{
+                  student.affectationEmplacementStages.length +
+                    "/" +
+                    student.niveau.stages.length
+                }}
+                <span
+                  *ngIf="
+                    student && student.affectationEmplacementStages.length > 0
+                  "
+                  class="p-1 text-white rounded bg-success"
+                >
+                  <svg
+                    cIcon
+                    name="cilCheckCircle"
+                    size="lg"
+                    title="Etudiant affecter"
+                  ></svg>
+                </span>
+                <span
+                  *ngIf="
+                    student && student.affectationEmplacementStages.length == 0
+                  "
+                  class="p-1 text-white rounded bg-danger"
+                >
+                  <svg
+                    cIcon
+                    name="cilX"
+                    size="lg"
+                    title="Etudiant affecter"
+                  ></svg>
+                </span>
+              </td>
+            </tr>
+          </ng-template>
         </tbody>
 
         <tfoot>
@@ -150,13 +223,61 @@
           *ngFor="let stage of selectedStudent.niveau.stages; index as i"
           class="p-3"
         >
-          <div>{{ stage.sujet }}</div>
-          <div *ngIf="checkAssinged(stage.nom); else affecterBlock">
-            Content to render when condition is true.
-          </div>
-          <ng-template #affecterBlock
-            ><button (click)="affecter(i)">Affecter</button></ng-template
+          <c-row class="my-2">
+            <h5>Sujet: {{ stage.sujet }}</h5></c-row
           >
+          <c-row class="d-flex justify-content-end">
+            <div class="">
+              <div *ngIf="checkAssinged(stage.nom); else affecterBlock">
+                <div
+                  *ngIf="
+                    selectedStudent.documents.length > 0;
+                    else noDocumentBlock
+                  "
+                  style="display: flex; flex-wrap: wrap"
+                >
+                  <div
+                    style="
+                      width: 38%;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      flex-direction: column;
+                    "
+                    *ngFor="
+                      let document of selectedStudent.documents;
+                      index as i
+                    "
+                  >
+                    <ngx-doc-viewer
+                      [url]="getPreviewLink(document.lien)"
+                      viewer="url"
+                      style="
+                        height: 50vh;
+                        margin-right: 1rem;
+                        display: inline-block;
+                      "
+                    >
+                    </ngx-doc-viewer>
+                    <p>{{ document.description }}</p>
+                  </div>
+                </div>
+                <ng-template #noDocumentBlock>
+                  <h5>Pas de document ajouté</h5>
+                </ng-template>
+              </div>
+
+              <ng-template #affecterBlock
+                ><h5 style="display: inline-block">
+                  Etudiant pas encore affecté
+                </h5>
+                <span>{{ " " }}</span>
+                <button cButton (click)="affecter(i)">
+                  Affecter!
+                </button></ng-template
+              >
+            </div>
+          </c-row>
         </c-tab-pane>
       </c-tab-content>
     </c-modal-body>

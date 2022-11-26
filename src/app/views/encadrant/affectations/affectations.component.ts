@@ -44,7 +44,7 @@ export class AffectationsComponent implements OnInit {
 
     this.activateRoute.queryParams.subscribe((params) => {
       console.log(params);
-      if (params?.['stageId']) {
+      if (params?.['stageId'] && this.encadrantService.selectedStudent) {
         this.encadrantService.me().subscribe((enc) => {
           console;
           this.assignStudentForm.controls.encadrant.setValue(enc);
