@@ -56,16 +56,74 @@
           </c-row>
           <c-row *ngIf="affectation.documents.length === 0"
             ><button cButton (click)="ajouterDocument()">
-              ajouterDocument
+              Ajouter Document
             </button></c-row
           >
           <c-row *ngIf="affectation.documents.length > 0">
-            <p *ngFor="let document of affectation.documents; index as i">
-              {{ document.lien }}
-            </p>
+            <div
+            style="
+              width: 38%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+            "
+            *ngFor="
+              let document of affectation.documents;
+              index as i
+            "
+          >
+            <ngx-doc-viewer
+              [url]="getPreviewLink(document.lien)"
+              viewer="url"
+              style="
+                height: 50vh;
+                margin-right: 1rem;
+                display: inline-block;
+              "
+            >
+            </ngx-doc-viewer>
+            <p>{{ document.description }}</p>
+          </div>
           </c-row>
         </c-tab-pane>
       </c-tab-content>
     </c-card-body>
   </c-card>
 </c-row>
+
+
+<c-modal
+  #verticallyCenteredModal
+  alignment="center"
+  id="modalLg"
+  size="lg"
+  [visible]="isModalVisible"
+  (visibleChange)="toggleModal($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Ajouter Document</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <h2>Formulaire d'ajout des document de stage</h2>
+    <form cForm [formGroup]="addDocumentForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label cLabel for="documentLink">Lien Document(PDF)</label>
+        <input
+          formControlName="lien"
+          cFormControl
+          type="text"
+        />
+      </div>
+      <div class="mb-3">
+        <label cLabel for="description">Description</label>
+        <input
+          formControlName="description"
+          cFormControl
+          type="text"
+        />
+      </div>
+      <button cButton type="submit">Ajouter</button>
+    </form>
+  </c-modal-body>
+</c-modal>
