@@ -2,21 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { cilCheckCircle, cilPencil, cilTrash, cilX, cilZoom } from '@coreui/icons';
-import { EmplacementStage } from 'src/app/entities/EmplacementStage';
+import { Niveau } from 'src/app/entities/Niveau';
+
 import { AdminService } from 'src/app/services/admin/admin.service';
 @Component({
-  selector: 'emplacement-list',
-  templateUrl: './emplacement-list.component.html',
-  styleUrls: ['./emplacement-list.component.scss']
+  selector: 'niveau-list',
+  templateUrl: './niveau-list.component.html',
+  styleUrls: ['./niveau-list.component.scss']
 })
-export class EmplacementListComponent implements OnInit {
+export class NiveauListComponent implements OnInit {
   icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isAddModalVisible = false;
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
-  selectedEmplacement:any= {id:null,nom:"", adresse:"",ville:""}
+  selectedNiveau:any= {id:null,libelle:""}
   selectedID:any={id:null}
-  empls: any = [];
+  niveau: any = [];
   currentPage: number = 1;
   itemsCount: number = 0;
 
@@ -25,28 +26,28 @@ export class EmplacementListComponent implements OnInit {
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getEmpl(this.currentPage - 1);
+    this.getNiveau(this.currentPage - 1);
   }
-  getEmpl(page: number): void{
-    this.adminService.getEmpl(page).subscribe((emplacements)=>{
-      this.empls=emplacements.content;
+  getNiveau(page: number): void{
+    this.adminService.getNivaux(page).subscribe((niv)=>{
+      this.niveau=niv.content;
 
     })
   }
-  emplPageChanged($event: number) {
+  niveauPageChanged($event: number) {
     if (this.search) {
-      this.searchEmpl($event - 1);
+      this.searchNiveau($event - 1);
     } else {
-      this.getEmpl($event - 1);
+      this.getNiveau($event - 1);
     }
     this.currentPage = $event;
     console.log($event);
   }
-  searchEmpl(page:number){
-    this.adminService.searchEmpl(this.searchTerm.value as string,page).subscribe((empls:any) => {
+  searchNiveau(page:number){
+    this.adminService.searchNiveau(this.searchTerm.value as string,page).subscribe((niv:any) => {
 
-      this.empls = empls.content;
-      this.itemsCount = empls.totalElements;
+      this.niveau = niv.content;
+      this.itemsCount = niv.totalElements;
 
     });
 
@@ -62,11 +63,11 @@ export class EmplacementListComponent implements OnInit {
     this.isUpdateModalVisible = event;
   }
   onClickSubmit(data: {
-    nom: string; adresse: string;ville:string
+    libelle: string
 }) {
-  const empl:EmplacementStage ={nom:data.nom,adresse:data.adresse,ville:data.ville}
+  const niveau:Niveau ={libelle:data.libelle}
 
-  this.adminService.createEmpl(empl).subscribe((res) => {
+  this.adminService.createNiveau(niveau).subscribe((res) => {
     console.log(res);
     this.router.routeReuseStrategy.shouldReuseRoute= () => false;
        this.router.onSameUrlNavigation='reload';
@@ -78,26 +79,25 @@ export class EmplacementListComponent implements OnInit {
     console.log("clicked");
     this.isAddModalVisible=true;
   }
-  showEmplUpdateForm(empl:EmplacementStage){
-    this.selectedEmplacement.id=empl.id;
-    this.selectedEmplacement.nom=empl.nom;
-    this.selectedEmplacement.adresse=empl.adresse;
-    this.selectedEmplacement.ville=empl.ville;
+  showNiveauUpdateForm(niveau:Niveau){
+    this.selectedNiveau.id=niveau.id;
+    this.selectedNiveau.libelle=niveau.libelle;
+
 
     this.isUpdateModalVisible=true;
   }
-  showEmplDeleteForm(id:number){
+  showNiveauDeleteForm(id:number){
    this.selectedID.id=id;
    this.isDeleteModalVisible=true;
   }
    onClickUpdate(data: {
-    nom: string; adresse: string;ville:string; id:number
+    libelle: string;  id:number
 
 
 }){
-  const empl:EmplacementStage ={nom:data.nom,adresse:data.adresse,ville:data.ville,id:data.id}
-
-    this.adminService.updateEmpl(empl).subscribe((res)=>{
+  const niveau:Niveau ={libelle:data.libelle,id:data.id}
+    console.log(data);
+    this.adminService.updateNiveau(niveau).subscribe((res)=>{
     this.router.routeReuseStrategy.shouldReuseRoute= () => false;
        this.router.onSameUrlNavigation='reload';
        this.router.navigate(['./'],{relativeTo: this.route})
@@ -107,8 +107,8 @@ export class EmplacementListComponent implements OnInit {
    cancel(){
   this.isDeleteModalVisible=false;
    }
-   deleteEmpl(id:number){
-    this.adminService.deleteEmpl(id).subscribe((res)=>{
+   deleteNiveau(id:number){
+    this.adminService.deleteNiveau(id).subscribe((res)=>{
 
        this.router.routeReuseStrategy.shouldReuseRoute= () => false;
        this.router.onSameUrlNavigation='reload';

@@ -6,6 +6,7 @@ import { Etudiant } from 'src/app/entities/Etudiant';
 import { Niveau } from 'src/app/entities/Niveau';
 import { AdminService } from 'src/app/services/admin/admin.service';
 import { textChangeRangeIsUnchanged } from 'typescript/lib/tsserverlibrary';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'etudiantt-list',
@@ -17,6 +18,7 @@ export class EtudianttListComponent implements OnInit {
   icons = { cilZoom, cilCheckCircle, cilX ,cilPencil,cilTrash};
   isDeleteModalVisible=false;
   isUpdateModalVisible = false;
+  isBulkModalVisible=false;
   selectedStudent:any= {id:null,nom:"", prenom:"",email:"",password:""}
   selectedNiveau:any= {id:null, libelle:""}
   selectedID:any={id:null}
@@ -28,6 +30,10 @@ export class EtudianttListComponent implements OnInit {
 
   search=false;
   searchTerm = new FormControl('');
+
+  convertedJason!: string;
+
+  niveau= new FormControl('');
   constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) {
 
    }
@@ -75,6 +81,9 @@ export class EtudianttListComponent implements OnInit {
   toggleAddModal(event: any) {
     this.isAddModalVisible = event;
   }
+  toggleBulkModal(event:any){
+    this.isBulkModalVisible=event;
+  }
   toggleDeleteModal(event: any) {
     this.isDeleteModalVisible = event;
   }
@@ -87,21 +96,27 @@ export class EtudianttListComponent implements OnInit {
 }) {
   this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
-     const etudiant:Etudiant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:n}
-
-  this.adminService.createStudent(etudiant).subscribe((res) => {
-    this.router.routeReuseStrategy.shouldReuseRoute= () => false;
-    this.router.onSameUrlNavigation='reload';
-    this.router.navigate(['./'],{relativeTo: this.route})
-    this.isAddModalVisible=false;
-  });;
+    const etudiant:any ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:data.niveau}
+     console.log(etudiant)
+    this.adminService.createStudent(etudiant).subscribe((res) => {
+      console.log(res);
+      this.router.routeReuseStrategy.shouldReuseRoute= () => false;
+         this.router.onSameUrlNavigation='reload';
+         this.router.navigate(['./'],{relativeTo: this.route})
+         this.isAddModalVisible=false;
+    });;
 
   });
 
   }
+
+
   showCreation(){
     console.log("clicked");
     this.isAddModalVisible=true;
+  }
+  showBulk(){
+    this.isBulkModalVisible=true;
   }
   showStudentUpdateForm(etudiant:Etudiant){
     this.selectedStudent.id=etudiant.id;
@@ -147,6 +162,29 @@ console.log(etudiant);
        this.router.navigate(['./'],{relativeTo: this.route})
        this.isDeleteModalVisible=false;
 
+   }
+   fileUpload(event:any){
+    const selectedFile=event.target.files[0];
+    const fileReader=new FileReader();
+    fileReader.readAsBinaryString(selectedFile);
+    fileReader.onload= (event:any) =>{
+
+      let binaryData= event.target.result;
+      let workBook=XLSX.read(binaryData, {type:'binary'})
+      workBook.SheetNames.forEach(sheet=>{
+        let data=XLSX.utils.sheet_to_json(workBook.Sheets[sheet])
+
+        data=data.map((etudiant:any)=>{return {...etudiant,niveau:this.niveau.value}})
+        console.log(data)
+        this.adminService.createStudents(data).subscribe((res) => {
+
+          this.router.routeReuseStrategy.shouldReuseRoute= () => false;
+             this.router.onSameUrlNavigation='reload';
+             this.router.navigate(['./'],{relativeTo: this.route})
+             this.isAddModalVisible=false;
+        });
+      })
+    }
    }
 
 }

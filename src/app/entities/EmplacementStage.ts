@@ -1,6 +1,6 @@
 export interface EmplacementStage {
   id?: number;
   nom?: string;
-  address?: string;
+  adresse?: string;
   ville?: string;
 }

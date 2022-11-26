@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { Annonce } from 'src/app/entities/Annonce';
+import { EmplacementStage } from 'src/app/entities/EmplacementStage';
 import { Encadrant } from 'src/app/entities/Encadrant';
 import { Etudiant } from 'src/app/entities/Etudiant';
+import { Niveau } from 'src/app/entities/Niveau';
 import { Stage } from 'src/app/entities/Stage';
 import { Stagee } from 'src/app/entities/stagee';
 import { User } from 'src/app/entities/User';
@@ -30,7 +32,7 @@ export class AdminService {
       `http://localhost:8081/admin/administrateurs/${page}`
     );
   }
-  createStudent(etudiant: Etudiant): Observable<any> {
+  createStudent(etudiant: any): Observable<any> {
     return this.httpService.doPost(
       `http://localhost:8081/admin/etudiant`, etudiant
     );
@@ -100,12 +102,12 @@ export class AdminService {
       `http://localhost:8081/admin/stages/${page}`
     );
   }
-  createStage(stage: Stagee): Observable<any> {
+  createStage(stage: any): Observable<any> {
     return this.httpService.doPost(
       `http://localhost:8081/admin/stage`, stage
     );
   }
-  updateStage(stage: Stagee): Observable<any> {
+  updateStage(stage: any): Observable<any> {
     return this.httpService.doPut(
       `http://localhost:8081/admin/stage`, stage
     );
@@ -148,6 +150,66 @@ export class AdminService {
   searchAnnonces(searchTerm: string, page: number) {
     return this.httpService.doGet(
       `http://localhost:8081/admin/annonces/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  createStudents(data:any): Observable<any> {
+    return this.httpService.doPost(
+      `http://localhost:8081/admin/students`, data
+    );
+  }
+  getAnnonces(page: number): Observable<any> {
+    return this.httpService.doGet(
+      `http://localhost:8081/home/annonces/${page}`
+    );
+  }
+  createNiveau(niveau: Niveau): Observable<any> {
+    return this.httpService.doPost(
+      `http://localhost:8081/admin/niveau`, niveau
+    );
+  }
+  updateNiveau(niveau: Niveau): Observable<any> {
+    return this.httpService.doPut(
+      `http://localhost:8081/admin/niveau`, niveau
+    );
+  }
+  deleteNiveau(id: number): Observable<any> {
+    return this.httpService.doDelete(
+      `http://localhost:8081/admin/niveau/${id}`
+    );
+  }
+  searchNiveau(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/niveau/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  searchEmpl(searchTerm: string, page: number) {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/emplacement/search?search=${searchTerm}&page=${page}`
+    );
+  }
+  getNiveauFromStage(stage:Stage): Observable<any> {
+    return this.httpService.doPost(
+      `http://localhost:8081/admin/getNiveau`, stage
+    );
+  }
+  getEmpl(page: number): Observable<any> {
+    return this.httpService.doGet(
+      `http://localhost:8081/admin/emplacements/${page}`
+    );
+  }
+  createEmpl(emplacement: EmplacementStage): Observable<any> {
+    return this.httpService.doPost(
+      `http://localhost:8081/admin/emplacement`, emplacement
+    );
+  }
+  updateEmpl(emplacement: EmplacementStage): Observable<any> {
+    return this.httpService.doPut(
+      `http://localhost:8081/admin/emplacement`, emplacement
+    );
+  }
+  deleteEmpl(id: number): Observable<any> {
+    return this.httpService.doDelete(
+      `http://localhost:8081/admin/emplacement/${id}`
     );
   }
 
