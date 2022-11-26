@@ -66,7 +66,7 @@ export class AdminListComponent implements OnInit {
   onClickSubmit(data: {
     nom: string; email: string; prenom: string;password:string
 }) {
-  const admin:User ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email}
+  const admin:User ={nom:data.nom,prenom:data.prenom,password:"",email:data.email}
   console.log(admin);
   this.adminService.createAdmin(admin).subscribe((res) => {
     console.log(res);
@@ -97,7 +97,7 @@ export class AdminListComponent implements OnInit {
 
 
 }){
-  const admin:User ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,id:data.id}
+  const admin:User ={nom:data.nom,prenom:data.prenom,email:data.email,id:data.id}
     console.log(data);
     this.adminService.updateAdmin(admin).subscribe((res)=>{
     this.router.routeReuseStrategy.shouldReuseRoute= () => false;
