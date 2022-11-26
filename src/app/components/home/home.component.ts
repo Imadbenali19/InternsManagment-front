@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AdminService } from 'src/app/services/admin/admin.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -14,13 +16,14 @@ export class HomeComponent implements OnInit {
   itemsCount: number = 0;
   search=false;
   searchTerm = new FormControl('');
-  constructor(private adminService : AdminService, private router:Router, private route:ActivatedRoute) { }
+  public jwtHelper: JwtHelperService = new JwtHelperService();
+  constructor(private adminService : AdminService, private router:Router,private authService:AuthService) { }
 
   ngOnInit(): void {
     this.getAnnonces(this.currentPage - 1);
   }
   getAnnonces(page: number): void{
-    this.adminService.getAnnonce(page).subscribe((annonces)=>{
+    this.adminService.getAnnonces(page).subscribe((annonces)=>{
       this.annonces=annonces.content;
       console.log(this.annonces)
     })
@@ -41,6 +44,22 @@ export class HomeComponent implements OnInit {
       this.itemsCount = annonces.totalElements;
 
     });
-
+}
+isAuthenticated(){
+  const token = this.authService.getStoredToken();
+  if(token && !this.jwtHelper.isTokenExpired(token)){
+      return true;
   }
+  return false;
+
+}
+getRedirectLink(){
+  const role: string =  this.authService.getUserRole();
+  const link:string =   `/${role.toLowerCase()}/dashboard`;
+  console.log(link);
+  this.router.navigate([`/${role.toLowerCase().split('_')[1]}/dashboard`]);
+}
+redirectTo(link:string){
+    document.location.href=link;
+}
 }
