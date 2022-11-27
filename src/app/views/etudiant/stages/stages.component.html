@@ -55,7 +55,7 @@
             </div>
           </c-row>
           <c-row *ngIf="affectation.documents.length === 0"
-            ><button cButton (click)="ajouterDocument()">
+            ><button cButton (click)="ajouterDocument(affectation.id)">
               Ajouter Document
             </button></c-row
           >

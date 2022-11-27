@@ -14,6 +14,7 @@ import { EtudiantService } from 'src/app/services/etudiant/etudiant.service';
 export class StagesComponent implements OnInit {
   etudiant: any = { affectationEmplacementStages: [] };
   addDocumentForm = this.fb.group<addDocumentDTO>({
+    affectationId: null,
     lien: '',
     description: '',
     type: 'rapport',
@@ -25,6 +26,8 @@ export class StagesComponent implements OnInit {
   toastVisible = false;
   percentage = 0;
   toastMessage = '';
+
+  
 
   constructor(
     private etudiantService: EtudiantService,
@@ -39,9 +42,11 @@ export class StagesComponent implements OnInit {
       this.loading = true;
     });
   }
-  ajouterDocument() {
+  ajouterDocument(affectationId: number) {
     console.log('hello');
     this.isModalVisible = true;
+    
+this.addDocumentForm.controls['affectationId'].setValue(affectationId);
   }
 
   toggleModal(event: any) {
