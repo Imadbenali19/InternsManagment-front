@@ -1,4 +1,5 @@
 <c-row> <h2>Etudiants</h2> </c-row>
+
 <c-row>
   <c-card class="my-4 shadow border-0">
     <c-card-body class="align-middle">
@@ -48,7 +49,7 @@
 [striped]="true"
 align="middle"
  cTable
- class="border">
+ class="border-0">
   <thead>
   <tr>
   <th scope="col">Nom</th>
@@ -69,8 +70,8 @@ align="middle"
       <td>{{etudiant.nom}}</td>
       <td>{{etudiant.prenom}}</td>
       <td>{{etudiant.email}}</td>
-
       <td>{{etudiant.niveau.libelle}}</td>
+
 
 
 
@@ -91,27 +92,63 @@ align="middle"
 </c-card>
 </c-row>
 <div class="pt-2">
-<button cButton class="bg-success border-0 shadow " (click)="showCreation()">create student</button>
+<button cButton class="bg-success border-0 shadow " (click)="showCreation()">creer etudiant</button>
 </div>
+<br/>
+
+
+
+
+
+<!-- Upload  -->
+<form class="pt-4" id="file-upload-form" class="uploader">
+  <h2>Choisir un niveau</h2>
+  <select  [formControl]="niveau" aria-label="Default select example" cSelect
+  name="niveau"
+  id="niveau"
+  class="form-control"
+  >
+
+  <option *ngFor="let niveau of nivaux " [ngValue]="niveau" >{{ niveau.libelle }}</option>
+</select>
+  <input id="file-upload" type="file" name="fileUpload" (change)="fileUpload($event)" accept=".xls, .xlsx" />
+
+  <label for="file-upload" id="file-drag">
+    <img id="file-image" src="#" alt="Preview" class="hidden">
+    <div id="start">
+      <i class="fa fa-download" aria-hidden="true"></i>
+      <div>Select a file or drag here</div>
+      <div id="notimage" class="hidden">Please select an image</div>
+      <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
+    </div>
+    <div id="response" class="hidden">
+      <div id="messages"></div>
+      <progress class="progress" id="file-progress" value="0">
+        <span>0</span>%
+      </progress>
+    </div>
+  </label>
+
+</form>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
   <c-modal-header>
     <h5 cModalTitle>Creer L'etudiant</h5>
   </c-modal-header>
   <c-modal-body>
 
-    <h2>Formulaire d'affectation</h2>
+    <h2>Formulaire de creation</h2>
     <form cForm #studentForm="ngForm" (ngSubmit)="onClickSubmit(studentForm.value)">
       <div class="mb-3">
         <label  cLabel for="nom">Nom</label>
-        <input cFormControl name="nom"  type="text" ngModel>
+        <input cFormControl name="nom"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input cFormControl name="prenom"  type="text" ngModel>
+        <input cFormControl name="prenom"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input cFormControl name="email"  type="text" ngModel>
+        <input cFormControl name="email"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="niveau">niveau</label>
@@ -138,7 +175,7 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Creer L'etudiant</h5>
+    <h5 cModalTitle>Modifier L'etudiant</h5>
   </c-modal-header>
   <c-modal-body>
 
@@ -147,15 +184,15 @@ align="middle"
       <input  name="id"  type="hidden" ngModel  [(ngModel)]="selectedStudent.id" >
       <div class="mb-3">
         <label cLabel for="nom">Nom</label>
-        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedStudent.nom" >
+        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedStudent.nom" required >
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedStudent.prenom">
+        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedStudent.prenom" required>
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedStudent.email">
+        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedStudent.email" required>
       </div>
       <div class="mb-3">
         <label cLabel for="niveau">niveau</label>
@@ -183,7 +220,7 @@ align="middle"
   </c-modal-header>
   <c-modal-body>
 
-    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <h2>Supprimer l'etudiant?</h2>
     <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
     <div class="mt-2">
       <button cButton class="bg-danger border-0 shadow " (click)="deleteStudent(selectedID.id)">supprimer</button>
@@ -192,6 +229,7 @@ align="middle"
   </div>
   </c-modal-body>
 </c-modal>
+
 
 
 

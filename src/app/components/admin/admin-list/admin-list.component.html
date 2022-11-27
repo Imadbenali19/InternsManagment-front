@@ -90,27 +90,27 @@ align="middle"
 
 <c-modal #verticallyCenteredModal alignment="center" id="modalLg" size="lg" [visible]="isAddModalVisible" (visibleChange)="toggleAddModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Creer L'etudiant</h5>
+    <h5 cModalTitle>Creer admin</h5>
   </c-modal-header>
   <c-modal-body>
 
-    <h2>Formulaire d'affectation</h2>
+    <h2>Formulaire de creation</h2>
     <form cForm #adminForm="ngForm" (ngSubmit)="onClickSubmit(adminForm.value)">
       <div class="mb-3">
         <label cLabel for="nom">Nom</label>
-        <input cFormControl name="nom"  type="text" ngModel>
+        <input cFormControl name="nom"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input cFormControl name="prenom"  type="text" ngModel>
+        <input cFormControl name="prenom"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input cFormControl name="email"  type="text" ngModel>
+        <input cFormControl name="email"  type="text" ngModel required>
       </div>
       <div class="mb-3">
         <label cLabel for="password">password</label>
-        <input cFormControl name="password" type="password" ngModel>
+        <input cFormControl name="password" type="password" ngModel required>
       </div>
 
 
@@ -121,24 +121,24 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLup" size="lg" [visible]="isUpdateModalVisible" (visibleChange)="toggleUpdateModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Creer L'etudiant</h5>
+    <h5 cModalTitle>Modifier admin</h5>
   </c-modal-header>
   <c-modal-body>
 
     <h2>Formulaire de modification</h2>
     <form #adminUpdateForm="ngForm" (ngSubmit)="onClickUpdate(adminUpdateForm.value)">
-      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedAdmin.id" >
+      <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedAdmin.id" required>
       <div class="mb-3">
         <label cLabel for="nom">Nom</label>
-        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedAdmin.nom" >
+        <input cFormControl name="nom"  type="text" ngModel  [(ngModel)]="selectedAdmin.nom" required >
       </div>
       <div class="mb-3">
         <label cLabel for="prenom">prenom</label>
-        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedAdmin.prenom">
+        <input cFormControl name="prenom"  type="text" ngModel [(ngModel)]="selectedAdmin.prenom" required>
       </div>
       <div class="mb-3">
         <label cLabel for="email">email</label>
-        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedAdmin.email">
+        <input cFormControl name="email"  type="text" ngModel [(ngModel)]="selectedAdmin.email" required>
       </div>
 
 
@@ -150,11 +150,11 @@ align="middle"
 </c-modal>
 <c-modal #verticallyCenteredModal alignment="center" id="modalLdel" size="lg" [visible]="isDeleteModalVisible" (visibleChange)="toggleDeleteModal($event)">
   <c-modal-header>
-    <h5 cModalTitle>Supprimert L'etudiant</h5>
+    <h5 cModalTitle>Supprimert admin</h5>
   </c-modal-header>
   <c-modal-body>
 
-    <h2>YOU SURE YOU WANT TO DELETE??!!</h2>
+    <h2>Supprimer l'admin?</h2>
     <input name="id"  type="hidden" ngModel  [(ngModel)]="selectedID.id" >
     <div class="mt-2">
       <button cButton class="bg-danger border-0 shadow " (click)="deleteAdmin(selectedID.id)">supprimer</button>

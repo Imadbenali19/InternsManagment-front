@@ -54,8 +54,8 @@ export class AffectationsComponent implements OnInit {
           this.encadrantService.selectedStudent
         );
 
-        this.assignStudentForm.controls.stage.setValue(
-          this.encadrantService.selectedStudent?.niveau?.stages[
+       this.assignStudentForm.controls.stage.setValue(
+          this.encadrantService.selectedStudent!.niveau!.stages![
             params['stageId']
           ]
         );

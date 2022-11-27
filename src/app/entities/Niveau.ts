@@ -1,7 +1,7 @@
 import { Stage } from './Stage';
 
 export interface Niveau {
-  id: number;
+  id?: number;
   libelle: string;
-  stages: Stage[];
+  stages?: Stage[];
 }
