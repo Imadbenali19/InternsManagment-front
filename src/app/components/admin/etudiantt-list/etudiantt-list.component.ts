@@ -96,7 +96,7 @@ export class EtudianttListComponent implements OnInit {
 }) {
   this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
-    const etudiant:any ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:data.niveau}
+    const etudiant:any ={nom:data.nom,prenom:data.prenom,password:"",email:data.email,niveau:data.niveau}
      console.log(etudiant)
     this.adminService.createStudent(etudiant).subscribe((res) => {
       console.log(res);

@@ -1,11 +1,7 @@
 import { INavData } from '@coreui/angular';
 
 export const adminNavItems: INavData[] = [
-  {
-    name: 'Dashboard',
-    url: '/admin/dashboard',
-    iconComponent: { name: 'cil-speedometer' },
-  },
+  
 
  {
   name: 'Encadrants',

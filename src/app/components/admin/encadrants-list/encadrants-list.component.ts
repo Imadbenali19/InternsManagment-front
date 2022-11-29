@@ -81,7 +81,7 @@ export class EncadrantsListComponent implements OnInit {
 
   this.adminService.getNiveau(data.niveau).subscribe((n) => {
 
-    const encadrant:Encadrant ={nom:data.nom,prenom:data.prenom,password:data.password,email:data.email,niveau:n}
+    const encadrant:Encadrant ={nom:data.nom,prenom:data.prenom,password:"",email:data.email,niveau:n}
      console.log(encadrant)
     this.adminService.createEncadrant(encadrant).subscribe((res) => {
       console.log(res);
