@@ -16,8 +16,12 @@ export class EtudiantService {
 
   addDocument(document: addDocumentDTO): Observable<Etudiant> {
     return this.httpService.doPost(
-      'http://localhost:8081/etudiant/etudiant',
+      'http://localhost:8081/etudiant/importDocument',
       document
     );
+  }
+
+  getCollegues(): Observable<Etudiant> {
+    return this.httpService.doGet('http://localhost:8081/etudiant/collegues');
   }
 }
