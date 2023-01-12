@@ -20,4 +20,8 @@ export class EtudiantService {
       document
     );
   }
+
+  getCollegues(): Observable<Etudiant> {
+    return this.httpService.doGet('http://localhost:8081/etudiant/collegues');
+  }
 }
